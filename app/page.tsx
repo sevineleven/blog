@@ -17,7 +17,7 @@ export default async function Home({
       <header style={{ padding: '40px 0 40px' }}>
         <div style={{ marginBottom: 12 }}>
           <h1 style={{ fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 6 }}>
-            sevin
+            sevineleven
           </h1>
           <p style={{ color: 'var(--muted)', fontSize: 14 }}>
             배우고 기록하는 개발자의 공간
