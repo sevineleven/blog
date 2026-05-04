@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getPost, getAllPosts, getAdjacentPosts } from '@/lib/posts';
+import Comments from '@/components/Comments';
+import ViewTracker from '@/components/ViewTracker';
+import BlogToc from '@/components/BlogToc';
 import '@/app/posts/prose.css';
 
 export async function generateStaticParams() {
@@ -22,7 +25,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const { prev, next } = getAdjacentPosts(slug);
 
   return (
-    <div style={{ paddingTop: 48, paddingBottom: 80 }}>
+    <div>
+      <BlogToc headings={post.headings} />
       {/* 브레드크럼 */}
       <div style={{
         fontFamily: 'var(--mono)',
@@ -97,6 +101,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           </Link>
         )}
       </div>
+
+      <ViewTracker slug={slug} />
+      <Comments slug={slug} />
     </div>
   );
 }
