@@ -22,66 +22,78 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const { prev, next } = getAdjacentPosts(slug);
 
   return (
-    <div>
-      {/* 브레드크럼 프롬프트 */}
-      <div style={{ marginBottom: 28, fontSize: 13 }}>
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <span style={{ color: 'var(--green)' }}>sevin</span>
-          <span style={{ color: 'var(--muted)' }}>@blog</span>
-          <span style={{ color: 'var(--text)' }}>:</span>
-          <span style={{ color: 'var(--blue)' }}>~/posts</span>
-        </Link>
-        <span style={{ color: 'var(--text)' }}>$ </span>
-        <span style={{ color: 'var(--text)' }}>cat </span>
-        <span style={{ color: 'var(--yellow)' }}>{slug}.md</span>
+    <div style={{ paddingTop: 48, paddingBottom: 80 }}>
+      {/* 브레드크럼 */}
+      <div style={{
+        fontFamily: 'var(--mono)',
+        fontSize: 12,
+        color: 'var(--muted)',
+        marginBottom: 40,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+      }}>
+        <span style={{ color: 'var(--green)' }}>$</span>
+        <Link href="/" style={{ color: 'var(--muted)', textDecoration: 'none' }}>~/posts</Link>
+        <span>/</span>
+        <span style={{ color: 'var(--text)' }}>{slug}</span>
       </div>
 
       {/* 포스트 헤더 */}
-      <div style={{
-        borderBottom: '1px solid var(--border)',
-        paddingBottom: 20,
-        marginBottom: 32,
-      }}>
-        <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+      <header style={{ marginBottom: 40 }}>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
           {post.tags.map((t) => (
             <Link key={t} href={`/?tag=${t}`} style={{
+              fontFamily: 'var(--mono)',
+              fontSize: 11,
               color: 'var(--purple)',
-              fontSize: 12,
+              background: 'rgba(183,148,244,0.08)',
+              padding: '2px 8px',
+              borderRadius: 3,
               textDecoration: 'none',
             }}>
               #{t}
             </Link>
           ))}
         </div>
-        <h1 style={{ fontSize: 22, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3, marginBottom: 8 }}>
+        <h1 style={{
+          fontSize: 28,
+          fontWeight: 700,
+          letterSpacing: '-0.02em',
+          lineHeight: 1.3,
+          marginBottom: 12,
+        }}>
           {post.title}
         </h1>
-        <span style={{ color: 'var(--muted)', fontSize: 12 }}>{post.date}</span>
-      </div>
+        <time style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
+          {post.date}
+        </time>
+      </header>
+
+      <hr style={{ border: 'none', borderTop: '1px solid var(--border)', marginBottom: 40 }} />
 
       {/* 본문 */}
       <div className="prose" dangerouslySetInnerHTML={{ __html: post.content }} />
 
       {/* 이전/다음 */}
       <div style={{
-        marginTop: 48,
-        paddingTop: 20,
+        marginTop: 64,
+        paddingTop: 24,
         borderTop: '1px solid var(--border)',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: 16,
-        fontSize: 13,
       }}>
         {prev ? (
-          <Link href={`/posts/${prev.slug}`} style={{ textDecoration: 'none', color: 'var(--text)' }}>
-            <div style={{ color: 'var(--muted)', fontSize: 11, marginBottom: 4 }}>← prev</div>
-            <span style={{ color: 'var(--green)' }}>▸ </span>{prev.title}
+          <Link href={`/posts/${prev.slug}`} style={{ textDecoration: 'none' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>← prev</div>
+            <div style={{ fontSize: 14, color: 'var(--text)', fontWeight: 500 }}>{prev.title}</div>
           </Link>
         ) : <div />}
         {next && (
-          <Link href={`/posts/${next.slug}`} style={{ textDecoration: 'none', color: 'var(--text)', textAlign: 'right' }}>
-            <div style={{ color: 'var(--muted)', fontSize: 11, marginBottom: 4 }}>next →</div>
-            {next.title}<span style={{ color: 'var(--green)' }}> ◂</span>
+          <Link href={`/posts/${next.slug}`} style={{ textDecoration: 'none', textAlign: 'right' }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>next →</div>
+            <div style={{ fontSize: 14, color: 'var(--text)', fontWeight: 500 }}>{next.title}</div>
           </Link>
         )}
       </div>
