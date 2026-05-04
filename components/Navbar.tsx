@@ -4,17 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-interface NavbarProps {
-  onSearchOpen: () => void;
-}
-
 const NAV = [
-  { label: '~', href: 'https://sevin.dev', external: true, title: 'portfolio' },
-  { label: 'blog', href: '/' },
-  { label: 'universe', href: '/universe' },
+  { label: '$ cd ~',         href: 'https://sevin.dev', external: true },
+  { label: '$ cd ~/blog',    href: '/' },
+  { label: '$ cd ~/universe',href: '/universe' },
 ];
 
-export default function Navbar({ onSearchOpen }: NavbarProps) {
+export default function Navbar({ onSearchOpen }: { onSearchOpen: () => void }) {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -29,10 +25,10 @@ export default function Navbar({ onSearchOpen }: NavbarProps) {
   }, [onSearchOpen]);
 
   const getPath = () => {
-    if (pathname === '/') return '/';
-    if (pathname === '/universe') return '/universe';
-    if (pathname.startsWith('/posts/')) return `/posts/${pathname.split('/posts/')[1]}`;
-    return '/';
+    if (pathname === '/') return '~/blog';
+    if (pathname === '/universe') return '~/blog/universe';
+    if (pathname.startsWith('/posts/')) return `~/blog/${pathname.split('/posts/')[1]}`;
+    return '~/blog';
   };
 
   return (
@@ -40,138 +36,56 @@ export default function Navbar({ onSearchOpen }: NavbarProps) {
       position: 'sticky',
       top: 0,
       zIndex: 50,
-      background: 'rgba(17,17,20,0.88)',
-      backdropFilter: 'blur(14px)',
-      WebkitBackdropFilter: 'blur(14px)',
+      background: 'rgba(15,15,18,0.88)',
+      backdropFilter: 'blur(16px)',
+      WebkitBackdropFilter: 'blur(16px)',
       borderBottom: '1px solid var(--border)',
       marginLeft: -24,
       marginRight: -24,
       padding: '0 24px',
     }}>
+      {/* 경로 표시줄 */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: 48,
-        gap: 16,
+        height: 38,
+        borderBottom: '1px solid var(--border)',
       }}>
-        {/* 왼쪽: 경로 브레드크럼 */}
-        <div style={{
-          fontFamily: 'var(--mono)',
-          fontSize: 12,
-          color: 'var(--muted)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 0,
-          minWidth: 0,
-          overflow: 'hidden',
-        }}>
-          <span style={{ color: 'var(--green)', flexShrink: 0 }}>sevineleven</span>
-          <span style={{ flexShrink: 0 }}>&nbsp;:&nbsp;</span>
-          <span style={{
-            color: 'var(--blue)',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}>
-            {getPath()}
-          </span>
-        </div>
+        <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', letterSpacing: '0.01em' }}>
+          <span style={{ color: 'var(--green)' }}>sevineleven</span>
+          <span>@dev</span>
+          <span style={{ color: 'var(--border)', margin: '0 6px' }}>:</span>
+          <span style={{ color: 'var(--blue)' }}>{getPath()}</span>
+        </span>
 
-        {/* 오른쪽: 네비 + 검색 */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
-          {NAV.map((item, i) => {
-            const isActive = !item.external && (
-              item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
-            );
-            const linkStyle = {
-              fontFamily: 'var(--mono)',
-              fontSize: 13,
-              textDecoration: 'none',
-              padding: '5px 10px',
-              borderRadius: 6,
-              transition: 'all 0.15s',
-              color: isActive ? 'var(--green)' : 'var(--muted)',
-              background: isActive ? 'rgba(61,214,140,0.1)' : 'transparent',
-              border: isActive ? '1px solid rgba(61,214,140,0.2)' : '1px solid transparent',
-              display: 'inline-block',
-            } as React.CSSProperties;
+        <button className="search-btn" onClick={onSearchOpen}>
+          <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+            <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.6"/>
+            <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+          </svg>
+          search
+          <kbd>⌘K</kbd>
+        </button>
+      </div>
 
-            return (
-              <span key={item.href} style={{ display: 'flex', alignItems: 'center' }}>
-                {i > 0 && (
-                  <span style={{ color: 'var(--border)', fontSize: 14, padding: '0 2px', userSelect: 'none' }}>
-                    /
-                  </span>
-                )}
-                {item.external ? (
-                  <a href={item.href} target="_blank" rel="noopener noreferrer" style={linkStyle}>
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link href={item.href} style={linkStyle}>
-                    {item.label}
-                  </Link>
-                )}
-              </span>
-            );
-          })}
-
-          {/* 구분선 */}
-          <span style={{
-            width: 1,
-            height: 16,
-            background: 'var(--border)',
-            margin: '0 8px',
-            display: 'inline-block',
-          }} />
-
-          {/* 검색 버튼 */}
-          <button
-            onClick={onSearchOpen}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-              fontFamily: 'var(--mono)',
-              fontSize: 12,
-              color: 'var(--muted)',
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 6,
-              padding: '5px 10px',
-              cursor: 'pointer',
-              transition: 'all 0.15s',
-              outline: 'none',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = 'var(--green)';
-              e.currentTarget.style.color = 'var(--text)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = 'var(--border)';
-              e.currentTarget.style.color = 'var(--muted)';
-            }}
-          >
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.5 }}>
-              <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.5"/>
-              <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
-            search
-            <kbd style={{
-              fontSize: 10,
-              fontFamily: 'var(--mono)',
-              background: 'var(--subtle)',
-              border: '1px solid var(--border)',
-              borderRadius: 4,
-              padding: '1px 5px',
-              color: 'var(--muted)',
-              lineHeight: 1.6,
-            }}>
-              ⌘K
-            </kbd>
-          </button>
-        </div>
+      {/* 네비게이션 링크 */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 40 }}>
+        {NAV.map((item) => {
+          const isActive = !item.external && (
+            item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
+          );
+          const cls = `nav-link${isActive ? ' active' : ''}`;
+          return item.external ? (
+            <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className="nav-link">
+              {item.label}
+            </a>
+          ) : (
+            <Link key={item.href} href={item.href} className={cls}>
+              {item.label}
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );

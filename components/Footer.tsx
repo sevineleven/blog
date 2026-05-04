@@ -3,19 +3,30 @@ export default function Footer() {
     <footer style={{
       borderTop: '1px solid var(--border)',
       marginTop: 80,
-      padding: '28px 0 52px',
+      padding: '24px 0 52px',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      flexWrap: 'wrap',
-      gap: 12,
     }}>
-      <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
-        © {new Date().getFullYear()} sevineleven.
+      <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)' }}>
+        © {new Date().getFullYear()} sevineleven
       </span>
-      <span style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic' }}>
-        "write more, learn deeper."
-      </span>
+      <a
+        href="https://github.com/sevineleven"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          fontFamily: 'var(--mono)',
+          fontSize: 11,
+          color: 'var(--muted)',
+          textDecoration: 'none',
+          transition: 'color 0.15s',
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--text)')}
+        onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--muted)')}
+      >
+        github ↗
+      </a>
     </footer>
   );
 }
