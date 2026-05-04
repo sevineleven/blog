@@ -3,17 +3,19 @@ export default function Footer() {
     <footer style={{
       borderTop: '1px solid var(--border)',
       marginTop: 80,
-      padding: '32px 0 48px',
+      padding: '28px 0 52px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      flexWrap: 'wrap',
+      gap: 12,
     }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12 }}>
-        <p style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
-          © {new Date().getFullYear()} sevin.
-        </p>
-        <p style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic', textAlign: 'right' }}>
-          "write more, learn deeper." —{' '}
-          <span style={{ color: 'var(--text)' }}>sevin</span>
-        </p>
-      </div>
+      <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
+        © {new Date().getFullYear()} sevineleven.
+      </span>
+      <span style={{ fontSize: 13, color: 'var(--muted)', fontStyle: 'italic' }}>
+        "write more, learn deeper."
+      </span>
     </footer>
   );
 }
