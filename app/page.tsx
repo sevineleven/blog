@@ -14,7 +14,7 @@ export default async function Home({
   return (
     <div>
       {/* 프로필 헤더 */}
-      <header style={{ padding: '64px 0 48px' }}>
+      <header style={{ padding: '40px 0 40px' }}>
         <div style={{ marginBottom: 12 }}>
           <h1 style={{ fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 6 }}>
             sevin
