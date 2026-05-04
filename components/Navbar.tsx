@@ -5,26 +5,23 @@ import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 const FIXED_NAV = [
-  { cmd: 'cd', path: '~/blog',     href: '/' },
-  { cmd: 'cd', path: '~/universe', href: '/universe' },
+  { cmd: 'cd',   path: '~/blog',     href: '/',          external: false },
+  { cmd: 'cd',   path: '~/universe', href: '/universe',  external: false },
+  { cmd: 'cd',   path: '~/portfolio', href: 'https://sevin.dev', external: true },
 ];
 
 function getParent(pathname: string): { cmd: string; path: string; href: string; external: boolean } {
-  if (pathname === '/') {
-    return { cmd: 'cd', path: '..', href: 'https://sevin.dev', external: true };
-  }
+  // 루트에서 cd .. → 블로그 자신(/)으로, 포트폴리오는 cd ~/portfolio 버튼 별도 존재
   return { cmd: 'cd', path: '..', href: '/', external: false };
 }
 
 function ZshCmd({ cmd, path, isActive }: { cmd: string; path: string; isActive: boolean }) {
+  const c = isActive ? 'var(--green)' : undefined;
   return (
-    <span style={{ fontFamily: 'var(--mono)', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 0 }}>
-      <span style={{ color: isActive ? 'var(--green)' : 'var(--muted)' }}>$&nbsp;</span>
-      {/* 유효한 명령어 → white, active → green */}
-      <span style={{ color: isActive ? 'var(--green)' : 'var(--text)' }}>{cmd}</span>
-      <span>&nbsp;</span>
-      {/* 경로 → blue */}
-      <span style={{ color: isActive ? 'var(--green)' : 'var(--blue)' }}>{path}</span>
+    <span style={{ fontFamily: 'var(--mono)', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+      <span style={{ color: c ?? 'var(--muted)' }}>$</span>
+      <span style={{ color: c ?? 'var(--text)' }}>{cmd}</span>
+      <span style={{ color: c ?? 'var(--blue)' }}>{path}</span>
     </span>
   );
 }
@@ -94,7 +91,7 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
         </div>
 
         {/* 하단: 네비 링크 (zsh 색상) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 44 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, height: 44 }}>
           {/* 동적 cd .. */}
           {(() => {
             const parent = getParent(pathname);
@@ -111,14 +108,19 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
           })()}
 
           {/* 구분선 */}
-          <span style={{ width: 1, height: 14, background: 'var(--border)', margin: '0 4px', flexShrink: 0 }} />
+          <span style={{ width: 1, height: 14, background: 'var(--border)', flexShrink: 0 }} />
 
           {/* 고정 nav */}
           {FIXED_NAV.map((item) => {
-            const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-            return (
+            const isActive = !item.external && (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href));
+            const inner = <ZshCmd cmd={item.cmd} path={item.path} isActive={isActive} />;
+            return item.external ? (
+              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className="nav-link">
+                {inner}
+              </a>
+            ) : (
               <Link key={item.href} href={item.href} className={`nav-link${isActive ? ' active' : ''}`}>
-                <ZshCmd cmd={item.cmd} path={item.path} isActive={isActive} />
+                {inner}
               </Link>
             );
           })}
