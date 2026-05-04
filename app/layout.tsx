@@ -10,15 +10,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const posts = getAllPosts();
-
   return (
     <html lang="ko">
       <body>
-        <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px' }}>
-          <Shell posts={posts}>
-            {children}
-          </Shell>
-        </div>
+        <Shell posts={posts}>
+          {children}
+        </Shell>
       </body>
     </html>
   );
