@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
     const { data, error } = await supabase
       .from('comments')
-      .insert({ post_slug, author: author.trim(), body: body.trim() })
+      .insert({ post_slug, author: author.trim(), body: body.trim(), password_hash: '' })
       .select('id, author, body, created_at')
       .single();
 
