@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getAllPosts, getAllTags } from '@/lib/posts';
+import PostListItem from '@/components/PostListItem';
 
 export default async function Home({
   searchParams,
@@ -12,26 +13,45 @@ export default async function Home({
 
   return (
     <div>
-      {/* 프롬프트 헤더 */}
-      <div style={{ marginBottom: 32 }}>
-        <span style={{ color: 'var(--green)' }}>sevin</span>
-        <span style={{ color: 'var(--muted)' }}>@blog</span>
-        <span style={{ color: 'var(--text)' }}>:</span>
-        <span style={{ color: 'var(--blue)' }}>~</span>
-        <span style={{ color: 'var(--text)' }}>$ </span>
-        <span style={{ color: 'var(--text)' }}>ls posts/</span>
-        {!tag && <span style={{ color: 'var(--muted)' }}></span>}
-        {tag && (
-          <span style={{ color: 'var(--muted)' }}> --tag=<span style={{ color: 'var(--yellow)' }}>{tag}</span></span>
-        )}
-      </div>
+      {/* 프로필 헤더 */}
+      <header style={{ padding: '64px 0 48px' }}>
+        <div style={{ marginBottom: 12 }}>
+          <h1 style={{ fontSize: 26, fontWeight: 700, letterSpacing: '-0.02em', marginBottom: 6 }}>
+            sevin
+          </h1>
+          <p style={{ color: 'var(--muted)', fontSize: 14 }}>
+            배우고 기록하는 개발자의 공간
+          </p>
+        </div>
+        <Link
+          href="/universe"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            marginTop: 16,
+            fontSize: 12,
+            fontFamily: 'var(--mono)',
+            color: 'var(--muted)',
+            textDecoration: 'none',
+            border: '1px solid var(--border)',
+            borderRadius: 6,
+            padding: '4px 12px',
+            transition: 'color 0.15s, border-color 0.15s',
+          }}
+          className="universe-link"
+        >
+          <span style={{ color: 'var(--green)' }}>✦</span> universe view
+        </Link>
+      </header>
 
       {/* 태그 필터 */}
       {tags.length > 0 && (
-        <div style={{ marginBottom: 28, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}>
           <Link href="/" style={{
             fontSize: 12,
-            padding: '2px 10px',
+            fontFamily: 'var(--mono)',
+            padding: '3px 10px',
             borderRadius: 4,
             border: `1px solid ${!tag ? 'var(--green)' : 'var(--border)'}`,
             color: !tag ? 'var(--green)' : 'var(--muted)',
@@ -42,7 +62,8 @@ export default async function Home({
           {tags.map((t) => (
             <Link key={t} href={`/?tag=${t}`} style={{
               fontSize: 12,
-              padding: '2px 10px',
+              fontFamily: 'var(--mono)',
+              padding: '3px 10px',
               borderRadius: 4,
               border: `1px solid ${tag === t ? 'var(--green)' : 'var(--border)'}`,
               color: tag === t ? 'var(--green)' : 'var(--muted)',
@@ -54,52 +75,31 @@ export default async function Home({
         </div>
       )}
 
-      {/* 포스트 목록 */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-        {posts.length === 0 && (
-          <span style={{ color: 'var(--muted)' }}>No entries found.</span>
-        )}
-        {posts.map((post) => (
-          <Link key={post.slug} href={`/posts/${post.slug}`} style={{ textDecoration: 'none' }}>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: '130px 1fr',
-              gap: '0 20px',
-              padding: '8px 0',
-              borderBottom: '1px solid var(--border)',
-              transition: 'background 0.1s',
-            }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-            >
-              <span style={{ color: 'var(--muted)', fontSize: 13, paddingTop: 1 }}>{post.date}</span>
-              <div>
-                <span style={{ color: 'var(--green)', marginRight: 6 }}>▸</span>
-                <span style={{ color: 'var(--text)', fontWeight: 500 }}>{post.title}</span>
-                <div style={{ marginTop: 4, display: 'flex', gap: 8 }}>
-                  {post.tags.map((t) => (
-                    <span key={t} style={{ color: 'var(--purple)', fontSize: 12 }}>#{t}</span>
-                  ))}
-                </div>
-                <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 4, lineHeight: 1.5 }}>
-                  {post.excerpt}
-                </div>
-              </div>
-            </div>
-          </Link>
-        ))}
+      {/* 섹션 레이블 */}
+      <div style={{
+        fontFamily: 'var(--mono)',
+        fontSize: 12,
+        color: 'var(--muted)',
+        marginBottom: 16,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 8,
+      }}>
+        <span style={{ color: 'var(--green)' }}>$</span>
+        <span>posts {tag ? `--tag=${tag}` : ''}</span>
+        <span style={{ flex: 1, height: 1, background: 'var(--border)', display: 'block' }} />
       </div>
 
-      {/* 하단 프롬프트 */}
-      <div style={{ marginTop: 28 }}>
-        <Link href="/universe" style={{ textDecoration: 'none' }}>
-          <span style={{ color: 'var(--green)' }}>sevin</span>
-          <span style={{ color: 'var(--muted)' }}>@blog</span>
-          <span style={{ color: 'var(--text)' }}>:</span>
-          <span style={{ color: 'var(--blue)' }}>~</span>
-          <span style={{ color: 'var(--text)' }}>$ </span>
-          <span style={{ color: 'var(--muted)' }}>open universe<span className="cursor" /></span>
-        </Link>
+      {/* 포스트 목록 */}
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        {posts.length === 0 && (
+          <p style={{ color: 'var(--muted)', fontFamily: 'var(--mono)', fontSize: 13 }}>
+            no posts found.
+          </p>
+        )}
+        {posts.map((post) => (
+          <PostListItem key={post.slug} post={post} />
+        ))}
       </div>
     </div>
   );
