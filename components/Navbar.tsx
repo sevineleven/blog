@@ -4,11 +4,17 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
-const NAV = [
-  { cmd: 'cd', path: '~',          href: 'https://sevin.dev', external: true },
+const FIXED_NAV = [
   { cmd: 'cd', path: '~/blog',     href: '/' },
   { cmd: 'cd', path: '~/universe', href: '/universe' },
 ];
+
+function getParent(pathname: string): { cmd: string; path: string; href: string; external: boolean } {
+  if (pathname === '/') {
+    return { cmd: 'cd', path: '..', href: 'https://sevin.dev', external: true };
+  }
+  return { cmd: 'cd', path: '..', href: '/', external: false };
+}
 
 function ZshCmd({ cmd, path, isActive }: { cmd: string; path: string; isActive: boolean }) {
   return (
@@ -89,20 +95,30 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
 
         {/* 하단: 네비 링크 (zsh 색상) */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 2, height: 44 }}>
-          {NAV.map((item) => {
-            const isActive = !item.external && (
-              item.href === '/' ? pathname === '/' : pathname.startsWith(item.href)
-            );
-            const content = <ZshCmd cmd={item.cmd} path={item.path} isActive={isActive} />;
-            const cls = `nav-link${isActive ? ' active' : ''}`;
-
-            return item.external ? (
-              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className="nav-link">
+          {/* 동적 cd .. */}
+          {(() => {
+            const parent = getParent(pathname);
+            const content = <ZshCmd cmd={parent.cmd} path={parent.path} isActive={false} />;
+            return parent.external ? (
+              <a href={parent.href} target="_blank" rel="noopener noreferrer" className="nav-link">
                 {content}
               </a>
             ) : (
-              <Link key={item.href} href={item.href} className={cls}>
+              <Link href={parent.href} className="nav-link">
                 {content}
+              </Link>
+            );
+          })()}
+
+          {/* 구분선 */}
+          <span style={{ width: 1, height: 14, background: 'var(--border)', margin: '0 4px', flexShrink: 0 }} />
+
+          {/* 고정 nav */}
+          {FIXED_NAV.map((item) => {
+            const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+            return (
+              <Link key={item.href} href={item.href} className={`nav-link${isActive ? ' active' : ''}`}>
+                <ZshCmd cmd={item.cmd} path={item.path} isActive={isActive} />
               </Link>
             );
           })}
