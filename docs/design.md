@@ -123,11 +123,59 @@ npm run new-post "Spring Boot 시작하기"
 
 ---
 
-## 배포
+## 인프라 & 배포
 
-- Vercel에 GitHub 레포 연결
-- `main` 브랜치 push → 자동 빌드 및 배포
-- 환경변수 불필요 (정적 빌드)
+### 도메인 라우팅
+
+```
+sevin.dev/           → 포트폴리오 (sevineleven/portfolio)
+sevin.dev/blog/      → 블로그 (sevineleven/blog)
+sevin.dev/blog/universe → 우주 그래프 뷰
+```
+
+### 구조
+
+```
+사용자
+  └→ Nginx (sevin.dev)
+        ├→ /blog/*  →  Vercel (blog)
+        └→ /*       →  Vercel (portfolio)
+```
+
+### Nginx 설정 (요약)
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name sevin.dev;
+
+    location /blog {
+        proxy_pass https://sevineleven-blog.vercel.app;
+        proxy_set_header Host sevineleven-blog.vercel.app;
+    }
+
+    location / {
+        proxy_pass https://sevineleven-portfolio.vercel.app;
+        proxy_set_header Host sevineleven-portfolio.vercel.app;
+    }
+}
+```
+
+### Next.js basePath 설정
+
+블로그는 `/blog` 경로에서 서빙되므로 `next.config.ts`에 설정 필요:
+
+```ts
+const nextConfig = {
+  basePath: '/blog',
+}
+```
+
+### 배포 흐름
+
+- 각 레포 Vercel에 연결
+- `main` 브랜치 push → Vercel 자동 빌드
+- Nginx는 Vercel 배포 URL로 프록시
 
 ---
 
