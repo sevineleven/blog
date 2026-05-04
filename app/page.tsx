@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { getAllPosts, getAllTags } from '@/lib/posts';
 import { supabase } from '@/lib/supabase';
@@ -40,24 +41,27 @@ export default async function Home({
           <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--green)' }}>$</span>
           <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--text)' }}>whoami</span>
         </div>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--muted)', paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <div>
-            <span style={{ color: 'var(--blue)', marginRight: 12 }}>name</span>
-            <span style={{ color: 'var(--text)' }}>parksevin</span>
-          </div>
-          <div>
-            <span style={{ color: 'var(--blue)', marginRight: 16 }}>role</span>
-            <span>backend engineer</span>
-          </div>
-          <div>
-            <span style={{ color: 'var(--blue)', marginRight: 8 }}>writing</span>
-            <span>배우면서 기록하기</span>
-          </div>
-          <div>
-            <span style={{ color: 'var(--blue)', marginRight: 4 }}>github</span>
-            <a href="https://github.com/sevineleven" target="_blank" rel="noopener noreferrer" className="whoami-link">
-              github.com/sevineleven
-            </a>
+        <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+          <Image src="/me.png" alt="박세빈" width={72} height={72} style={{ borderRadius: '50%', objectFit: 'cover', flexShrink: 0, border: '2px solid var(--border)' }} />
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--text)', paddingLeft: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <div>
+              <span style={{ color: 'var(--blue)', marginRight: 12 }}>name</span>
+              <span style={{ color: 'var(--text)' }}>parksevin</span>
+            </div>
+            <div>
+              <span style={{ color: 'var(--blue)', marginRight: 16 }}>role</span>
+              <span style={{ color: 'var(--text)' }}>backend engineer</span>
+            </div>
+            <div>
+              <span style={{ color: 'var(--blue)', marginRight: 8 }}>writing</span>
+              <span style={{ color: 'var(--text)' }}>배우면서 기록하기</span>
+            </div>
+            <div>
+              <span style={{ color: 'var(--blue)', marginRight: 4 }}>github</span>
+              <a href="https://github.com/sevineleven" target="_blank" rel="noopener noreferrer" className="whoami-link">
+                github.com/sevineleven
+              </a>
+            </div>
           </div>
         </div>
       </header>
@@ -68,7 +72,7 @@ export default async function Home({
           <Link href={sortHref('latest').replace('/', '') || '/'} style={{
             fontFamily: 'var(--mono)', fontSize: 12, padding: '4px 12px', borderRadius: 5,
             border: `1px solid ${!tag ? 'rgba(61,214,140,0.5)' : 'var(--border)'}`,
-            color: !tag ? 'var(--green)' : 'var(--muted)', textDecoration: 'none',
+            color: !tag ? 'var(--green)' : 'var(--text)', textDecoration: 'none',
             background: !tag ? 'rgba(61,214,140,0.07)' : 'transparent',
           }}>
             all
@@ -77,7 +81,7 @@ export default async function Home({
             <Link key={t} href={`/?tag=${t}${sort === 'views' ? '&sort=views' : ''}`} style={{
               fontFamily: 'var(--mono)', fontSize: 12, padding: '4px 12px', borderRadius: 5,
               border: `1px solid ${tag === t ? 'rgba(61,214,140,0.5)' : 'var(--border)'}`,
-              color: tag === t ? 'var(--green)' : 'var(--muted)', textDecoration: 'none',
+              color: tag === t ? 'var(--green)' : 'var(--text)', textDecoration: 'none',
               background: tag === t ? 'rgba(61,214,140,0.07)' : 'transparent',
             }}>
               #{t}
