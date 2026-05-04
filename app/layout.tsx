@@ -4,8 +4,13 @@ import Shell from '@/components/Shell';
 import { getAllPosts } from '@/lib/posts';
 
 export const metadata: Metadata = {
-  title: 'sevin.dev',
+  title: 'sevin.dev | blog',
   description: '배우고 기록하는 개발자의 공간',
+  openGraph: {
+    title: 'sevin.dev | blog',
+    description: '배우고 기록하는 개발자의 공간',
+    url: 'https://blog.sevin.dev',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
