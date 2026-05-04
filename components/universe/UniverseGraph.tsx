@@ -337,8 +337,8 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
         const pos = n.mesh.position.clone().project(camera);
         if (pos.z >= 1 || tick < 40 || vis <= 0) { el.style.opacity = '0'; return; }
         el.style.opacity = String(vis);
-        el.style.left = `${((pos.x + 1) / 2) * container.clientWidth}px`;
-        el.style.top = `${((-pos.y + 1) / 2) * container.clientHeight + (n.type === 'category' ? 20 : 12)}px`;
+        el.style.left = `${((pos.x + 1) / 2) * container!.clientWidth}px`;
+        el.style.top = `${((-pos.y + 1) / 2) * container!.clientHeight + (n.type === 'category' ? 20 : 12)}px`;
       });
 
       renderer.render(scene, camera);
