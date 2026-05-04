@@ -22,44 +22,69 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   const { prev, next } = getAdjacentPosts(slug);
 
   return (
-    <main className="max-w-3xl mx-auto px-4 py-16">
-      <Link href="/" className="text-xs text-zinc-500 hover:text-white transition-colors mb-10 inline-block">
-        ← 목록으로
-      </Link>
+    <div>
+      {/* 브레드크럼 프롬프트 */}
+      <div style={{ marginBottom: 28, fontSize: 13 }}>
+        <Link href="/" style={{ textDecoration: 'none' }}>
+          <span style={{ color: 'var(--green)' }}>sevin</span>
+          <span style={{ color: 'var(--muted)' }}>@blog</span>
+          <span style={{ color: 'var(--text)' }}>:</span>
+          <span style={{ color: 'var(--blue)' }}>~/posts</span>
+        </Link>
+        <span style={{ color: 'var(--text)' }}>$ </span>
+        <span style={{ color: 'var(--text)' }}>cat </span>
+        <span style={{ color: 'var(--yellow)' }}>{slug}.md</span>
+      </div>
 
-      <article>
-        <header className="mb-10">
-          <div className="flex gap-2 mb-3">
-            {post.tags.map((t) => (
-              <Link key={t} href={`/?tag=${t}`} className="text-xs text-zinc-500 hover:text-white transition-colors">
-                #{t}
-              </Link>
-            ))}
-          </div>
-          <h1 className="text-3xl font-bold tracking-tight leading-tight mb-3">{post.title}</h1>
-          <time className="text-xs text-zinc-500">{post.date}</time>
-        </header>
+      {/* 포스트 헤더 */}
+      <div style={{
+        borderBottom: '1px solid var(--border)',
+        paddingBottom: 20,
+        marginBottom: 32,
+      }}>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+          {post.tags.map((t) => (
+            <Link key={t} href={`/?tag=${t}`} style={{
+              color: 'var(--purple)',
+              fontSize: 12,
+              textDecoration: 'none',
+            }}>
+              #{t}
+            </Link>
+          ))}
+        </div>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3, marginBottom: 8 }}>
+          {post.title}
+        </h1>
+        <span style={{ color: 'var(--muted)', fontSize: 12 }}>{post.date}</span>
+      </div>
 
-        <div
-          className="prose"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-      </article>
+      {/* 본문 */}
+      <div className="prose" dangerouslySetInnerHTML={{ __html: post.content }} />
 
-      <nav className="mt-16 pt-8 border-t border-zinc-800 flex justify-between gap-4 text-sm">
+      {/* 이전/다음 */}
+      <div style={{
+        marginTop: 48,
+        paddingTop: 20,
+        borderTop: '1px solid var(--border)',
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: 16,
+        fontSize: 13,
+      }}>
         {prev ? (
-          <Link href={`/posts/${prev.slug}`} className="text-zinc-400 hover:text-white transition-colors max-w-xs">
-            <span className="text-xs text-zinc-600 block mb-1">← 이전 글</span>
-            {prev.title}
+          <Link href={`/posts/${prev.slug}`} style={{ textDecoration: 'none', color: 'var(--text)' }}>
+            <div style={{ color: 'var(--muted)', fontSize: 11, marginBottom: 4 }}>← prev</div>
+            <span style={{ color: 'var(--green)' }}>▸ </span>{prev.title}
           </Link>
         ) : <div />}
         {next && (
-          <Link href={`/posts/${next.slug}`} className="text-zinc-400 hover:text-white transition-colors text-right max-w-xs">
-            <span className="text-xs text-zinc-600 block mb-1">다음 글 →</span>
-            {next.title}
+          <Link href={`/posts/${next.slug}`} style={{ textDecoration: 'none', color: 'var(--text)', textAlign: 'right' }}>
+            <div style={{ color: 'var(--muted)', fontSize: 11, marginBottom: 4 }}>next →</div>
+            {next.title}<span style={{ color: 'var(--green)' }}> ◂</span>
           </Link>
         )}
-      </nav>
-    </main>
+      </div>
+    </div>
   );
 }

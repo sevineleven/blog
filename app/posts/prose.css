@@ -1,113 +1,124 @@
 .prose {
-  color: #d4d4d4;
-  line-height: 1.8;
-  font-size: 1rem;
+  color: #c8c8c8;
+  line-height: 1.85;
+  font-family: 'JetBrains Mono', 'Geist Mono', monospace;
+  font-size: 14px;
 }
 
 .prose h1, .prose h2, .prose h3, .prose h4 {
-  color: #ffffff;
+  color: #e8e8e8;
   font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
+  margin-top: 2.2rem;
+  margin-bottom: 0.8rem;
   line-height: 1.3;
 }
-.prose h1 { font-size: 1.875rem; }
-.prose h2 { font-size: 1.5rem; border-bottom: 1px solid #27272a; padding-bottom: 0.4rem; }
-.prose h3 { font-size: 1.25rem; }
+.prose h1 { font-size: 1.5rem; }
+.prose h2 {
+  font-size: 1.2rem;
+  color: #27c93f;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #3a3a3a;
+}
+.prose h2::before { content: '## '; color: #3a3a3a; }
+.prose h3 { font-size: 1.05rem; }
+.prose h3::before { content: '### '; color: #3a3a3a; }
 
-.prose p { margin: 1.25rem 0; }
+.prose p { margin: 1.1rem 0; }
 
-.prose a { color: #a1a1aa; text-decoration: underline; text-underline-offset: 3px; }
-.prose a:hover { color: #ffffff; }
+.prose a { color: #5bc4f5; text-underline-offset: 3px; }
+.prose a:hover { color: #88d8ff; }
 
-.prose strong { color: #ffffff; font-weight: 600; }
-.prose em { color: #a1a1aa; }
+.prose strong { color: #ffffff; font-weight: 700; }
+.prose em { color: #bf95f9; font-style: normal; }
 
-.prose ul, .prose ol { padding-left: 1.5rem; margin: 1rem 0; }
-.prose li { margin: 0.4rem 0; }
-.prose ul li { list-style-type: disc; }
-.prose ol li { list-style-type: decimal; }
+.prose ul, .prose ol { padding-left: 1.4rem; margin: 0.8rem 0; }
+.prose li { margin: 0.3rem 0; }
+.prose ul li::marker { color: var(--green, #27c93f); }
+.prose ol li::marker { color: #5bc4f5; }
 
 .prose blockquote {
-  border-left: 3px solid #3f3f46;
-  padding-left: 1rem;
-  margin: 1.5rem 0;
-  color: #71717a;
-  font-style: italic;
+  border-left: 2px solid #27c93f;
+  padding: 4px 0 4px 16px;
+  margin: 1.4rem 0;
+  color: #636363;
+}
+.prose blockquote::before {
+  content: '// ';
+  color: #3a3a3a;
 }
 
-/* 코드 인라인 */
+/* 인라인 코드 */
 .prose :not(pre) > code {
-  background: #27272a;
-  color: #e4e4e7;
-  padding: 0.2em 0.4em;
-  border-radius: 4px;
-  font-size: 0.875em;
-  font-family: var(--font-geist-mono);
+  background: #2a2a2a;
+  color: #ffbd2e;
+  padding: 0.15em 0.45em;
+  border-radius: 3px;
+  font-size: 0.9em;
+  border: 1px solid #3a3a3a;
 }
 
-/* 코드 블록 (rehype-pretty-code) */
+/* 코드 블록 */
 .prose pre {
-  margin: 1.5rem 0;
+  margin: 1.4rem 0;
   border-radius: 8px;
   overflow-x: auto;
-  border: 1px solid #27272a;
+  border: 1px solid #3a3a3a;
 }
 .prose pre > code {
   display: block;
-  padding: 1.25rem;
-  font-size: 0.875rem;
-  font-family: var(--font-geist-mono);
+  padding: 1.1rem 1.3rem;
+  font-size: 13px;
   line-height: 1.7;
 }
 
 /* 이미지 */
 .prose img {
   max-width: 100%;
-  border-radius: 8px;
-  margin: 1.5rem auto;
+  border-radius: 6px;
+  margin: 1.4rem auto;
   display: block;
+  border: 1px solid #3a3a3a;
 }
 
-/* GIF — 자동 재생 그대로 */
-.prose img[src$=".gif"] {
-  image-rendering: auto;
-}
-
-/* 동영상 임베드 (iframe: YouTube 등) */
+/* iframe (YouTube 등) */
 .prose iframe {
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 8px;
-  border: none;
-  margin: 1.5rem 0;
+  border-radius: 6px;
+  border: 1px solid #3a3a3a;
+  margin: 1.4rem 0;
 }
 
-/* video 태그 */
+/* video */
 .prose video {
   width: 100%;
-  border-radius: 8px;
-  margin: 1.5rem 0;
+  border-radius: 6px;
+  margin: 1.4rem 0;
+  border: 1px solid #3a3a3a;
 }
 
 /* 테이블 */
 .prose table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1.5rem 0;
-  font-size: 0.9rem;
+  margin: 1.4rem 0;
+  font-size: 13px;
 }
 .prose th, .prose td {
-  border: 1px solid #3f3f46;
-  padding: 0.5rem 0.75rem;
+  border: 1px solid #3a3a3a;
+  padding: 6px 12px;
   text-align: left;
 }
-.prose th { background: #18181b; color: #ffffff; }
-.prose tr:nth-child(even) { background: #18181b; }
+.prose th {
+  background: #2a2a2a;
+  color: #27c93f;
+  font-weight: 600;
+}
+.prose tr:nth-child(even) td { background: #222; }
 
 /* 구분선 */
 .prose hr {
   border: none;
-  border-top: 1px solid #27272a;
+  border-top: 1px dashed #3a3a3a;
   margin: 2rem 0;
 }
