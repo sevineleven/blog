@@ -296,7 +296,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
         }
         highlightRef.current = highlighted;
       }
-      container.style.cursor = 'default';
+      if (container) container.style.cursor = 'default';
     }
 
     // ── 드래그 회전 ──────────────────────────────────────────
