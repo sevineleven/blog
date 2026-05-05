@@ -1,5 +1,5 @@
 ---
-title: "블로그 고도화 — 구글 검색 등록과 댓글 알림"
+title: "댓글 알림 구현과 구글 검색 등록"
 date: 2026-05-06T10:00:00Z
 category: 블로그
 tags: [블로그, SEO, Google Search Console, Resend]
