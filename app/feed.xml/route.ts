@@ -9,12 +9,15 @@ export function GET() {
   const items = posts
     .map((post) => {
       const url = `${siteUrl}/posts/${post.slug}`;
+      // post.date format: "2025-01-15 00:00 KST" → parse YYYY-MM-DD part
+      const datePart = post.date.match(/(\d{4}-\d{2}-\d{2})/)?.[1] ?? '';
+      const pubDate = datePart ? new Date(datePart).toUTCString() : '';
       return `
     <item>
       <title><![CDATA[${post.title}]]></title>
       <link>${url}</link>
       <guid isPermaLink="true">${url}</guid>
-      <pubDate>${new Date(post.date).toUTCString()}</pubDate>
+      <pubDate>${pubDate}</pubDate>
       <description><![CDATA[${post.excerpt}]]></description>
       <category><![CDATA[${post.category}]]></category>
     </item>`;
