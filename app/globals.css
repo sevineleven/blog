@@ -223,3 +223,36 @@ html, body {
 @media (max-width: 1100px) {
   .blog-toc { display: none; }
 }
+
+/* ── 사이드바 레이아웃 ──────────────────────────── */
+
+.blog-layout {
+  display: flex;
+  gap: 48px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 28px 80px;
+  align-items: flex-start;
+}
+
+.blog-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.blog-sidebar-col {
+  width: 200px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 108px;
+}
+
+.whoami-mobile {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .blog-sidebar-col { display: none; }
+  .blog-layout { max-width: 680px; padding: 48px 28px 80px; gap: 0; }
+  .whoami-mobile { display: block; }
+}
