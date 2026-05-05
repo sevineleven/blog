@@ -263,32 +263,31 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
     }
 
     function onClick() {
-      if (!hoveredNode) {
+      const target = clickTarget;
+      if (!target) {
         // 빈 공간 클릭 → 선택 해제
         selectedRef.current = null;
         highlightRef.current = new Set();
         return;
       }
-      if (hoveredNode.type === 'post') {
-        router.push(`/posts/${hoveredNode.id}`);
+      if (target.type === 'post') {
+        router.push(`/posts/${target.id}`);
         return;
       }
       // 태그 또는 카테고리 클릭
-      if (selectedRef.current === hoveredNode.id) {
+      if (selectedRef.current === target.id) {
         // 같은 노드 다시 클릭 → 해제
         selectedRef.current = null;
         highlightRef.current = new Set();
       } else {
-        const clicked = hoveredNode;
-        selectedRef.current = clicked.id;
+        selectedRef.current = target.id;
         const highlighted = new Set<string>();
-        if (clicked.type === 'tag') {
-          data.edges.filter((e) => e.source === clicked.id && e.type === 'tag-post')
+        if (target.type === 'tag') {
+          data.edges.filter((e) => e.source === target.id && e.type === 'tag-post')
             .forEach((e) => highlighted.add(e.target));
-        } else if (clicked.type === 'category') {
-          // 카테고리 → 하위 태그 → 포스트
+        } else if (target.type === 'category') {
           const childTags = data.edges
-            .filter((e) => e.source === clicked.id && e.type === 'category-tag')
+            .filter((e) => e.source === target.id && e.type === 'category-tag')
             .map((e) => e.target);
           data.edges
             .filter((e) => childTags.includes(e.source) && e.type === 'tag-post')
@@ -301,11 +300,20 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
 
     // ── 드래그 회전 ──────────────────────────────────────────
     let isDragging = false, prevMouse = { x: 0, y: 0 };
-    function onMouseDown(e: MouseEvent) { isDragging = true; prevMouse = { x: e.clientX, y: e.clientY }; }
+    let dragDist = 0;
+    let clickTarget: SimNode | null = null; // mousedown 시점의 hoveredNode
+    function onMouseDown(e: MouseEvent) {
+      isDragging = true;
+      dragDist = 0;
+      clickTarget = hoveredNode;
+      prevMouse = { x: e.clientX, y: e.clientY };
+    }
     function onMouseUp() { isDragging = false; }
     function onDrag(e: MouseEvent) {
       if (!isDragging) return;
       const dx = e.clientX - prevMouse.x, dy = e.clientY - prevMouse.y;
+      dragDist += Math.sqrt(dx * dx + dy * dy);
+      if (dragDist < 4) return; // 4px 미만 이동은 드래그로 처리 안 함
       const sph = new THREE.Spherical().setFromVector3(camera.position);
       sph.theta -= dx * 0.005;
       sph.phi = Math.max(0.1, Math.min(Math.PI - 0.1, sph.phi - dy * 0.005));
