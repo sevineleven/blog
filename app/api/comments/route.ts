@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get('slug');
@@ -29,6 +32,14 @@ export async function POST(req: NextRequest) {
       .single();
 
     if (error) { console.error('[POST comments]', error); return NextResponse.json({ error: error.message }, { status: 500 }); }
+
+    resend.emails.send({
+      from: 'blog@sevin.dev',
+      to: process.env.NOTIFICATION_EMAIL!,
+      subject: `[블로그] 새 댓글 - ${post_slug}`,
+      text: `${data.author}: ${data.body.slice(0, 100)}`,
+    }).catch((e) => console.error('[notify comment]', e));
+
     return NextResponse.json(data, { status: 201 });
   } catch (e) {
     console.error('[POST comments] unexpected', e);
