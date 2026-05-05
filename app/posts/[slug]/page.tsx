@@ -14,7 +14,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return {};
-  return { title: `${post.title} | sevin.dev`, description: post.excerpt };
+  const url = `https://blog.sevin.dev/posts/${slug}`;
+  return {
+    title: `${post.title} | sevin.dev`,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url,
+      type: 'article',
+      publishedTime: post.date,
+      tags: post.tags,
+    },
+    alternates: { canonical: url },
+  };
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
