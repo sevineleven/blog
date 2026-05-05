@@ -117,7 +117,7 @@ export async function getPost(slug: string): Promise<Post | null> {
     .use(rehypeRaw)
     .use(rehypeSlug)
     .use(rehypePrettyCode, {
-      themes: {
+      theme: {
         dark: 'github-dark',
         light: 'github-light',
       },
