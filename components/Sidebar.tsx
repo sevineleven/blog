@@ -25,31 +25,31 @@ export default function Sidebar() {
           <Image
             src="/me.png"
             alt="박세빈"
-            width={60}
-            height={60}
+            width={84}
+            height={84}
             style={{ borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--border)' }}
           />
-          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--text)', display: 'flex', flexDirection: 'column', gap: 4, width: '100%' }}>
-            <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--text)', display: 'flex', flexDirection: 'column', gap: 6, width: '100%' }}>
+            <div style={{ display: 'flex', gap: 10 }}>
               <span style={{ color: 'var(--blue)', flexShrink: 0 }}>name</span>
               <span>parksevin</span>
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 10 }}>
               <span style={{ color: 'var(--blue)', flexShrink: 0 }}>role</span>
               <span>backend engineer</span>
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 10 }}>
               <span style={{ color: 'var(--blue)', flexShrink: 0 }}>writing</span>
               <span>배우면서 기록하기</span>
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 10 }}>
               <span style={{ color: 'var(--blue)', flexShrink: 0 }}>github</span>
               <a
                 href="https://github.com/sevineleven"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="whoami-link"
-                style={{ fontSize: 11 }}
+                style={{ fontSize: 12 }}
               >
                 sevineleven
               </a>
