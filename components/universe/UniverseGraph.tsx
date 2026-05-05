@@ -89,6 +89,8 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [tooltip, setTooltip] = useState<{ title: string; x: number; y: number } | null>(null);
+  const selectedRef = useRef<string | null>(null);    // 선택된 태그/카테고리 id
+  const highlightRef = useRef<Set<string>>(new Set()); // 강조할 포스트 id
 
   useEffect(() => {
     const container = containerRef.current;
@@ -243,7 +245,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
         const node = simNodes.find((n) => n.mesh === sprite) ?? null;
         if (node !== hoveredNode) {
           hoveredNode = node;
-          container.style.cursor = node?.type === 'post' ? 'pointer' : 'default';
+          container.style.cursor = (node?.type === 'post' || node?.type === 'tag' || node?.type === 'category') ? 'pointer' : 'default';
         }
         if (node?.type === 'post') {
           const pos = sprite.position.clone().project(camera);
@@ -261,7 +263,39 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
     }
 
     function onClick() {
-      if (hoveredNode?.type === 'post') router.push(`/posts/${hoveredNode.id}`);
+      if (!hoveredNode) {
+        // 빈 공간 클릭 → 선택 해제
+        selectedRef.current = null;
+        highlightRef.current = new Set();
+        return;
+      }
+      if (hoveredNode.type === 'post') {
+        router.push(`/posts/${hoveredNode.id}`);
+        return;
+      }
+      // 태그 또는 카테고리 클릭
+      if (selectedRef.current === hoveredNode.id) {
+        // 같은 노드 다시 클릭 → 해제
+        selectedRef.current = null;
+        highlightRef.current = new Set();
+      } else {
+        selectedRef.current = hoveredNode.id;
+        const highlighted = new Set<string>();
+        if (hoveredNode.type === 'tag') {
+          data.edges.filter((e) => e.source === hoveredNode.id && e.type === 'tag-post')
+            .forEach((e) => highlighted.add(e.target));
+        } else if (hoveredNode.type === 'category') {
+          // 카테고리 → 하위 태그 → 포스트
+          const childTags = data.edges
+            .filter((e) => e.source === hoveredNode.id && e.type === 'category-tag')
+            .map((e) => e.target);
+          data.edges
+            .filter((e) => childTags.includes(e.source) && e.type === 'tag-post')
+            .forEach((e) => highlighted.add(e.target));
+        }
+        highlightRef.current = highlighted;
+      }
+      container.style.cursor = 'default';
     }
 
     // ── 드래그 회전 ──────────────────────────────────────────
@@ -310,13 +344,22 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
       tick++;
 
       // 반짝임 — 각 별마다 랜덤 위상/속도
+      const hasSelection = selectedRef.current !== null;
       simNodes.forEach((n) => {
         const t = tick * n.speed + n.phase;
         const twinkle = 0.6 + 0.4 * Math.sin(t);
-        (n.mesh.material as THREE.SpriteMaterial).opacity = twinkle;
+        const isHighlighted = n.type === 'post' && highlightRef.current.has(n.id);
+        const isDimmed = hasSelection && n.type === 'post' && !isHighlighted;
+
+        (n.mesh.material as THREE.SpriteMaterial).opacity = isDimmed ? twinkle * 0.2 : twinkle;
+
         if (n.type !== 'post') {
-          // 카테고리/태그는 크기도 살짝 맥동
           n.mesh.scale.setScalar(n.baseScale * (0.88 + 0.12 * Math.sin(t * 0.8)));
+        } else if (isHighlighted) {
+          // 강조된 포스트는 크게 + 맥동
+          n.mesh.scale.setScalar(n.baseScale * 3 * (0.9 + 0.1 * Math.sin(t * 1.2)));
+        } else {
+          n.mesh.scale.setScalar(n.baseScale);
         }
       });
 
