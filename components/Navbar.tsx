@@ -58,7 +58,7 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
       top: 0,
       zIndex: 50,
       width: '100%',
-      background: 'rgba(15,15,18,0.92)',
+      background: 'var(--nav-bg)',
       backdropFilter: 'blur(20px)',
       WebkitBackdropFilter: 'blur(20px)',
       borderBottom: '1px solid var(--border)',
