@@ -68,27 +68,26 @@
 
 /* ── shiki 듀얼 테마 ─────────────────────────────── */
 
-/* 기본: 다크 테마 */
-code[data-theme*=" "],
-code[data-theme*=" "] span {
+/* data-theme에 공백이 있으면 = 듀얼 테마 (github-dark github-light) */
+/* 기본: 다크 */
+[data-theme*="github-dark github-light"],
+[data-theme*="github-dark github-light"] span {
   color: var(--shiki-dark);
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
 /* 라이트 모드: 시스템 설정 */
 @media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) code[data-theme*=" "],
-  :root:not([data-theme="dark"]) code[data-theme*=" "] span {
+  :root:not([data-theme="dark"]) [data-theme*="github-dark github-light"],
+  :root:not([data-theme="dark"]) [data-theme*="github-dark github-light"] span {
     color: var(--shiki-light);
-    background-color: transparent;
   }
 }
 
 /* 라이트 모드: 수동 토글 */
-:root[data-theme="light"] code[data-theme*=" "],
-:root[data-theme="light"] code[data-theme*=" "] span {
+:root[data-theme="light"] [data-theme*="github-dark github-light"],
+:root[data-theme="light"] [data-theme*="github-dark github-light"] span {
   color: var(--shiki-light);
-  background-color: transparent;
 }
 
 /* 이미지 */
