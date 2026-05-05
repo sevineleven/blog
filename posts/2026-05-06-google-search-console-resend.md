@@ -162,4 +162,18 @@ export async function POST(req: NextRequest) {
 
 `await` 없이 `.catch()`만 달아서 이메일 발송 실패가 댓글 저장에 영향을 주지 않도록 했다.
 
+## 블로그 고도화 현황
+
+이번 글에서 한 것들이다.
+
+- [x] 댓글 알림 이메일 (Resend)
+- [x] sitemap.xml / robots.txt
+- [x] 포스트 OG 태그
+- [x] Google Search Console 등록 + sitemap 제출
+
+아직 남은 것들.
+
+- [ ] 포스트 이미지 캡처 삽입 (이 글)
+- [ ] MCP 서버 만들어보기
+
 이제 누군가 댓글을 달면 바로 이메일로 확인할 수 있다.
