@@ -245,19 +245,19 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
         const node = simNodes.find((n) => n.mesh === sprite) ?? null;
         if (node !== hoveredNode) {
           hoveredNode = node;
-          container.style.cursor = (node?.type === 'post' || node?.type === 'tag' || node?.type === 'category') ? 'pointer' : 'default';
+          if (container) container.style.cursor = (node?.type === 'post' || node?.type === 'tag' || node?.type === 'category') ? 'pointer' : 'default';
         }
         if (node?.type === 'post') {
           const pos = sprite.position.clone().project(camera);
           setTooltip({
             title: node.title,
-            x: ((pos.x + 1) / 2) * container.clientWidth,
-            y: ((-pos.y + 1) / 2) * container.clientHeight - 32,
+            x: ((pos.x + 1) / 2) * container!.clientWidth,
+            y: ((-pos.y + 1) / 2) * container!.clientHeight - 32,
           });
         } else { setTooltip(null); }
       } else {
         hoveredNode = null;
-        container.style.cursor = 'default';
+        if (container) container.style.cursor = 'default';
         setTooltip(null);
       }
     }

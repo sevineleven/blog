@@ -2,11 +2,20 @@
 
 import { useEffect, useState } from 'react';
 
+function getCookieTheme(): 'dark' | 'light' | null {
+  const m = document.cookie.match(/(?:^|;\s*)theme=(dark|light)/);
+  return m ? (m[1] as 'dark' | 'light') : null;
+}
+
+function setThemeCookie(theme: 'dark' | 'light') {
+  document.cookie = `theme=${theme}; domain=.sevin.dev; path=/; max-age=31536000; SameSite=Lax`;
+}
+
 export default function ThemeToggle() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme');
+    const stored = localStorage.getItem('theme') ?? getCookieTheme();
     if (stored === 'light' || stored === 'dark') {
       setTheme(stored);
     } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
@@ -18,6 +27,7 @@ export default function ThemeToggle() {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
     localStorage.setItem('theme', next);
+    setThemeCookie(next);
     document.documentElement.setAttribute('data-theme', next);
   };
 
