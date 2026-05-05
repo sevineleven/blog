@@ -21,13 +21,13 @@ export default function Shell({ children, posts }: { children: React.ReactNode; 
       <Navbar onSearchOpen={() => setSearchOpen(true)} containerStyle={NAV_CONTAINER} />
 
       <div className="blog-layout">
+        <div className="blog-sidebar-col">
+          <Sidebar />
+        </div>
         <main className="blog-main">
           {children}
           <Footer />
         </main>
-        <div className="blog-sidebar-col">
-          <Sidebar />
-        </div>
       </div>
 
       <SearchModal posts={posts} open={searchOpen} onClose={() => setSearchOpen(false)} />
