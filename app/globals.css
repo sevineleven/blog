@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Gmarket+Sans:wght@300;500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Dongle:wght@300;400;700&display=swap");
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import "tailwindcss";
 
@@ -15,7 +15,7 @@
   --yellow:  #f5c542;
   --mono:    'JetBrains Mono', monospace;
   --sans:    'Pretendard Variable', Pretendard, -apple-system, sans-serif;
-  --round:   'Gmarket Sans', 'Pretendard Variable', Pretendard, sans-serif;
+  --round:   'Dongle', 'Pretendard Variable', Pretendard, sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
