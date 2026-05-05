@@ -16,12 +16,11 @@ function getParent(pathname: string): { cmd: string; path: string; href: string;
 }
 
 function ZshCmd({ cmd, path, isActive }: { cmd: string; path: string; isActive: boolean }) {
-  const c = isActive ? 'var(--green)' : undefined;
   return (
     <span style={{ fontFamily: 'var(--mono)', fontSize: 12, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
-      <span style={{ color: c ?? 'var(--muted)' }}>$</span>
-      <span style={{ color: c ?? 'var(--text)' }}>{cmd}</span>
-      <span style={{ color: c ?? 'var(--blue)' }}>{path}</span>
+      <span style={{ color: 'var(--green)' }}>$</span>
+      <span style={{ color: isActive ? 'var(--green)' : 'var(--text)' }}>{cmd}</span>
+      <span style={{ color: isActive ? 'var(--green)' : 'var(--blue)' }}>{path}</span>
     </span>
   );
 }
