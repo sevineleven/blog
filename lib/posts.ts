@@ -117,8 +117,11 @@ export async function getPost(slug: string): Promise<Post | null> {
     .use(rehypeRaw)
     .use(rehypeSlug)
     .use(rehypePrettyCode, {
-      theme: 'github-dark',
-      keepBackground: true,
+      themes: {
+        dark: 'github-dark',
+        light: 'github-light',
+      },
+      keepBackground: false,
     })
     .use(rehypeStringify)
     .process(content);
