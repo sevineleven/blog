@@ -150,7 +150,7 @@ html, body {
   gap: 8px;
   transition: color 0.15s;
 }
-.post-item:hover .post-title { color: #fff; }
+.post-item:hover .post-title { color: var(--text); }
 
 .post-arrow {
   font-family: var(--mono);
