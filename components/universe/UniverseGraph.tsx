@@ -368,9 +368,9 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
             style={{
               position: 'absolute',
               transform: 'translateX(-50%)',
-              fontFamily: 'var(--mono)',
-              fontSize: n.type === 'category' ? 13 : 10,
-              fontWeight: n.type === 'category' ? 600 : 400,
+              fontFamily: 'var(--round)',
+              fontSize: n.type === 'category' ? 13 : n.type === 'tag' ? 11 : 10,
+              fontWeight: n.type === 'category' ? 500 : 300,
               color: n.type === 'category' ? 'var(--green)' : n.type === 'tag' ? 'var(--blue)' : 'var(--yellow)',
               opacity: 0,
               whiteSpace: 'nowrap',
