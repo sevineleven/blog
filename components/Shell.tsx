@@ -5,9 +5,10 @@ import { PostMeta } from '@/lib/posts';
 import Navbar from './Navbar';
 import SearchModal from './SearchModal';
 import Footer from './Footer';
+import Sidebar from './Sidebar';
 
-const CONTAINER = {
-  maxWidth: 680,
+const NAV_CONTAINER = {
+  maxWidth: 960,
   margin: '0 auto',
   padding: '0 28px',
 } as const;
@@ -17,13 +18,16 @@ export default function Shell({ children, posts }: { children: React.ReactNode; 
 
   return (
     <>
-      {/* 네브바: 뷰포트 전체 너비, 컨테이너 밖 */}
-      <Navbar onSearchOpen={() => setSearchOpen(true)} containerStyle={CONTAINER} />
+      <Navbar onSearchOpen={() => setSearchOpen(true)} containerStyle={NAV_CONTAINER} />
 
-      {/* 콘텐츠 영역 */}
-      <div style={{ ...CONTAINER, paddingTop: 48, paddingBottom: 80 }}>
-        <main>{children}</main>
-        <Footer />
+      <div className="blog-layout">
+        <main className="blog-main">
+          {children}
+          <Footer />
+        </main>
+        <div className="blog-sidebar-col">
+          <Sidebar />
+        </div>
       </div>
 
       <SearchModal posts={posts} open={searchOpen} onClose={() => setSearchOpen(false)} />

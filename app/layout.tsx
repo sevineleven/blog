@@ -3,6 +3,7 @@ import './globals.css';
 import Shell from '@/components/Shell';
 import { getAllPosts } from '@/lib/posts';
 import { Analytics } from '@vercel/analytics/next';
+import SiteVisitTracker from '@/components/SiteVisitTracker';
 
 export const metadata: Metadata = {
   title: 'sevin.dev | blog',
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </Shell>
         <Analytics />
+        <SiteVisitTracker />
       </body>
     </html>
   );
