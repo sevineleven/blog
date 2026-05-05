@@ -120,7 +120,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
     const TEX = {
       category: makeStarTex(61, 214, 140, true),  // 초록, 스파이크 있음
       tag:      makeStarTex(90, 172, 240, false),  // 파랑
-      post:     makeStarTex(179, 136, 255, false), // 보라
+      post:     makeStarTex(245, 197, 66, false),  // 노랑
     };
 
     // ── 노드 스프라이트 ──────────────────────────────────────
@@ -301,7 +301,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
     });
 
     // ── Animation ────────────────────────────────────────────
-    const labelNodes = simNodes.filter((n) => n.type !== 'post');
+    const labelNodes = simNodes;
     let frame: number, tick = 0;
 
     function animate() {
@@ -331,8 +331,8 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
       labelNodes.forEach((n) => {
         const el = document.getElementById(`ulbl-${n.id}`);
         if (!el) return;
-        const threshold = n.type === 'category' ? 1400 : 1100;
-        const fade = n.type === 'category' ? 200 : 150;
+        const threshold = n.type === 'category' ? 1400 : n.type === 'tag' ? 1100 : 480;
+        const fade = n.type === 'category' ? 200 : n.type === 'tag' ? 150 : 100;
         const vis = Math.max(0, Math.min(1, (threshold - camDist) / fade));
         const pos = n.mesh.position.clone().project(camera);
         if (pos.z >= 1 || tick < 40 || vis <= 0) { el.style.opacity = '0'; return; }
@@ -353,7 +353,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
     };
   }, [data, router]);
 
-  const labelNodes = data.nodes.filter((n) => n.type !== 'post');
+  const labelNodes = data.nodes;
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
@@ -371,7 +371,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
               fontFamily: 'var(--mono)',
               fontSize: n.type === 'category' ? 13 : 10,
               fontWeight: n.type === 'category' ? 600 : 400,
-              color: n.type === 'category' ? 'var(--green)' : 'var(--blue)',
+              color: n.type === 'category' ? 'var(--green)' : n.type === 'tag' ? 'var(--blue)' : 'var(--yellow)',
               opacity: 0,
               whiteSpace: 'nowrap',
               textShadow: '0 0 12px rgba(0,0,0,1)',
@@ -393,7 +393,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
           background: 'rgba(8,8,16,0.92)',
           color: 'var(--text)', padding: '5px 12px', borderRadius: 6,
           fontFamily: 'var(--mono)', fontSize: 12, pointerEvents: 'none',
-          whiteSpace: 'nowrap', border: '1px solid rgba(179,136,255,0.45)',
+          whiteSpace: 'nowrap', border: '1px solid rgba(245,197,66,0.45)',
           backdropFilter: 'blur(8px)',
         }}>
           {tooltip.title}
@@ -408,7 +408,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
         {([
           { color: 'var(--green)', label: 'category' },
           { color: 'var(--blue)',  label: 'tag'      },
-          { color: '#b388ff',      label: 'post'     },
+          { color: 'var(--yellow)', label: 'post'     },
         ] as const).map(({ color, label }) => (
           <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: color, boxShadow: `0 0 6px ${color}` }} />

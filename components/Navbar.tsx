@@ -115,7 +115,7 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
             const isActive = !item.external && (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href));
             const inner = <ZshCmd cmd={item.cmd} path={item.path} isActive={isActive} />;
             return item.external ? (
-              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className="nav-link">
+              <a key={item.href} href={item.href} className="nav-link">
                 {inner}
               </a>
             ) : (
