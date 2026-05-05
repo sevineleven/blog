@@ -91,6 +91,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
   const [tooltip, setTooltip] = useState<{ title: string; x: number; y: number } | null>(null);
   const selectedRef = useRef<string | null>(null);    // 선택된 태그/카테고리 id
   const highlightRef = useRef<Set<string>>(new Set()); // 강조할 포스트 id
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null); // 5초 리셋 타이머
 
   useEffect(() => {
     const container = containerRef.current;
@@ -262,12 +263,20 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
       }
     }
 
+    function scheduleReset() {
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = setTimeout(() => {
+        selectedRef.current = null;
+        highlightRef.current = new Set();
+      }, 5000);
+    }
+
     function onClick() {
       const target = clickTarget;
       if (!target) {
-        // 빈 공간 클릭 → 선택 해제
         selectedRef.current = null;
         highlightRef.current = new Set();
+        if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
         return;
       }
       if (target.type === 'post') {
@@ -294,6 +303,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
             .forEach((e) => highlighted.add(e.target));
         }
         highlightRef.current = highlighted;
+        scheduleReset();
       }
       if (container) container.style.cursor = 'default';
     }
@@ -312,17 +322,18 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
     function onDrag(e: MouseEvent) {
       if (!isDragging) return;
       const dx = e.clientX - prevMouse.x, dy = e.clientY - prevMouse.y;
+      prevMouse = { x: e.clientX, y: e.clientY }; // 항상 업데이트
       dragDist += Math.sqrt(dx * dx + dy * dy);
-      if (dragDist < 4) return; // 4px 미만 이동은 드래그로 처리 안 함
+      if (dragDist < 4) return; // 4px 미만은 드래그로 처리 안 함
       const sph = new THREE.Spherical().setFromVector3(camera.position);
       sph.theta -= dx * 0.005;
       sph.phi = Math.max(0.1, Math.min(Math.PI - 0.1, sph.phi - dy * 0.005));
       camera.position.setFromSpherical(sph);
       camera.lookAt(0, 0, 0);
-      prevMouse = { x: e.clientX, y: e.clientY };
     }
     function onWheel(e: WheelEvent) {
-      camera.position.multiplyScalar(1 + e.deltaY * 0.001);
+      const delta = e.deltaMode === 1 ? e.deltaY * 30 : e.deltaY; // 라인 단위 → 픽셀 변환
+      camera.position.multiplyScalar(1 + delta * 0.002);
       const d = camera.position.length();
       if (d < CAM_MIN) camera.position.setLength(CAM_MIN);
       if (d > CAM_MAX) camera.position.setLength(CAM_MAX);
@@ -400,6 +411,7 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('keydown', onKeyDown);
+      if (resetTimerRef.current) clearTimeout(resetTimerRef.current);
       renderer.dispose();
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
     };
