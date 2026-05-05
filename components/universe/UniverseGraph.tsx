@@ -279,15 +279,16 @@ export default function UniverseGraph({ data }: { data: GraphData }) {
         selectedRef.current = null;
         highlightRef.current = new Set();
       } else {
-        selectedRef.current = hoveredNode.id;
+        const clicked = hoveredNode;
+        selectedRef.current = clicked.id;
         const highlighted = new Set<string>();
-        if (hoveredNode.type === 'tag') {
-          data.edges.filter((e) => e.source === hoveredNode.id && e.type === 'tag-post')
+        if (clicked.type === 'tag') {
+          data.edges.filter((e) => e.source === clicked.id && e.type === 'tag-post')
             .forEach((e) => highlighted.add(e.target));
-        } else if (hoveredNode.type === 'category') {
+        } else if (clicked.type === 'category') {
           // 카테고리 → 하위 태그 → 포스트
           const childTags = data.edges
-            .filter((e) => e.source === hoveredNode.id && e.type === 'category-tag')
+            .filter((e) => e.source === clicked.id && e.type === 'category-tag')
             .map((e) => e.target);
           data.edges
             .filter((e) => childTags.includes(e.source) && e.type === 'tag-post')
