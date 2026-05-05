@@ -3,7 +3,7 @@ import { getAllPosts } from '@/lib/posts';
 export const dynamic = 'force-static';
 
 export function GET() {
-  const posts = getAllPosts().slice(0, 10);
+  const posts = getAllPosts().slice(0, 5);
   const siteUrl = 'https://blog.sevin.dev';
 
   const items = posts
