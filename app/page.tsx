@@ -35,8 +35,8 @@ export default async function Home({
 
   return (
     <div>
-      {/* whoami */}
-      <header style={{ paddingBottom: 36, borderBottom: '1px solid var(--border)' }}>
+      {/* whoami — 모바일 전용 (데스크탑은 사이드바) */}
+      <header className="whoami-mobile" style={{ paddingBottom: 36, borderBottom: '1px solid var(--border)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
           <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--green)' }}>$</span>
           <span style={{ fontFamily: 'var(--mono)', fontSize: 13, color: 'var(--text)' }}>whoami</span>
