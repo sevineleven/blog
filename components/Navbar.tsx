@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
+import ThemeToggle from './ThemeToggle';
 
 const FIXED_NAV = [
   { cmd: 'cd',   path: '~/blog',     href: '/',          external: false },
@@ -79,14 +80,17 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
             <span style={{ color: 'var(--blue)' }}>{getPath()}</span>
           </span>
 
-          <button className="search-btn" onClick={onSearchOpen}>
-            <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
-              <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
-            search
-            <kbd>⌘K</kbd>
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <ThemeToggle />
+            <button className="search-btn" onClick={onSearchOpen}>
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+                <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" strokeWidth="1.6" />
+                <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+              search
+              <kbd>⌘K</kbd>
+            </button>
+          </div>
         </div>
 
         {/* 하단: 네비 링크 (zsh 색상) */}
