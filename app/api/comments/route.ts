@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
       from: 'blog@sevin.dev',
       to: process.env.NOTIFICATION_EMAIL!,
       subject: `[블로그] 새 댓글 - ${post_slug}`,
-      text: `${data.author}: ${data.body.slice(0, 100)}`,
+      text: `${data.author}: ${data.body.slice(0, 100)}\n\nhttps://blog.sevin.dev/posts/${post_slug}#comments`,
     }).catch((e) => console.error('[notify comment]', e));
 
     return NextResponse.json(data, { status: 201 });

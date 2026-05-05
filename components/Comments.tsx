@@ -57,7 +57,7 @@ export default function Comments({ slug }: { slug: string }) {
   }
 
   return (
-    <div style={{ marginTop: 64, paddingTop: 32, borderTop: '1px solid var(--border)' }}>
+    <div id="comments" style={{ marginTop: 64, paddingTop: 32, borderTop: '1px solid var(--border)' }}>
       {/* 섹션 레이블 */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 28 }}>
         <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--green)' }}>$</span>
