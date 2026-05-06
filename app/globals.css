@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Do+Hyeon&display=swap");
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import "tailwindcss";
 
 :root {
@@ -14,9 +12,9 @@
   --purple:  #b388ff;
   --yellow:  #f5c542;
   --nav-bg:  rgba(15,15,18,0.92);
-  --mono:    'JetBrains Mono', monospace;
+  --mono:    var(--font-mono), monospace;
   --sans:    'Pretendard Variable', Pretendard, -apple-system, sans-serif;
-  --round:   'Do Hyeon', 'Pretendard Variable', Pretendard, sans-serif;
+  --round:   var(--font-round), 'Pretendard Variable', Pretendard, sans-serif;
 }
 
 /* ── Light mode ─────────────────────────────────── */

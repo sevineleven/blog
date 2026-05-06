@@ -1,10 +1,25 @@
 import type { Metadata } from 'next';
+import { JetBrains_Mono, Do_Hyeon } from 'next/font/google';
 import './globals.css';
 import Shell from '@/components/Shell';
 import { getAllPosts } from '@/lib/posts';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import SiteVisitTracker from '@/components/SiteVisitTracker';
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-mono',
+  display: 'swap',
+});
+
+const doHyeon = Do_Hyeon({
+  subsets: ['latin'],
+  weight: ['400'],
+  variable: '--font-round',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'sevin.dev | blog',
@@ -19,8 +34,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const posts = getAllPosts();
   return (
-    <html lang="ko">
+    <html lang="ko" className={`${jetbrainsMono.variable} ${doHyeon.variable}`}>
       <head>
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme')||(document.cookie.match(/(?:^|;\\s*)theme=(dark|light)/)||[])[1];if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}else if(window.matchMedia('(prefers-color-scheme: light)').matches){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();` }} />
       </head>
       <body>
