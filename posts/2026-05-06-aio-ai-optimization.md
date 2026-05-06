@@ -29,19 +29,19 @@ draft: false
 
 비슷해 보이는 용어들이 있어서 정리해두자.
 
-**SEO (Search Engine Optimization)**
+`SEO (Search Engine Optimization)`
 구글 같은 검색엔진이 내 페이지를 발견하고, 검색 결과 상위에 노출되게 만드는 것.
 키워드, 백링크, 사이트 구조 같은 게 핵심이다.
 
-**AEO (AI Engine Optimization)**
+`AEO (AI Engine Optimization)`
 AI가 질문에 직접 답변할 때 내 콘텐츠가 그 답으로 선택되게 하는 것.
 ChatGPT나 Perplexity가 "PostgreSQL 인덱스 언제 써?" 물어봤을 때 내 글을 인용하게 만드는 거라고 보면 된다.
 
-**GEO (Generative Engine Optimization)**
+`GEO (Generative Engine Optimization)`
 AI가 내 브랜드나 사이트를 신뢰할 수 있는 전문가 소스로 반복 인식하게 만드는 것.
 AEO가 "한 번 인용"이라면 GEO는 "반복 인용 → 학습 소스"에 가깝다.
 
-그리고 **AIO (AI Optimization)** - 사실 이건 공식 업계 용어가 아니다.
+그리고 `AIO (AI Optimization)` - 사실 이건 공식 업계 용어가 아니다.
 
 검색해보면 AEO, GEO는 꽤 많이 쓰이는데 AIO는 일부에서만 쓰거나 이 모두를 묶는 비공식 umbrella 용어로 쓰인다.
 
