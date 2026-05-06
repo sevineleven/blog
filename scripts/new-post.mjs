@@ -44,7 +44,9 @@ async function main() {
     process.exit(1);
   }
 
-  const date = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  const date = now.toISOString().split('T')[0];
+  const datetime = now.toISOString();
   const filename = `${date}-${rawSlug}.md`;
   const filepath = path.join(POSTS_DIR, filename);
 
@@ -55,7 +57,7 @@ async function main() {
 
   const content = `---
 title: "${title}"
-date: ${date}
+date: ${datetime}
 category: ${category}
 tags: []
 excerpt: ""
