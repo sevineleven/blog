@@ -73,6 +73,7 @@ html, body {
   line-height: 1.75;
   min-height: 100vh;
   overflow-x: hidden;
+  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
