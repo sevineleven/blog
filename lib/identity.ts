@@ -83,6 +83,11 @@ export interface Identity {
   author: string;
 }
 
+export function emojiForAuthor(author: string): string {
+  const match = ANIMALS.find((a) => author.includes(a.name));
+  return match ? match.emoji : '👤';
+}
+
 function generate(): Identity {
   const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
   const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];

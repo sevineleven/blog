@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { getIdentity, type Identity } from '@/lib/identity';
+import { getIdentity, emojiForAuthor, type Identity } from '@/lib/identity';
 
 interface Comment {
   id: string;
@@ -85,6 +85,7 @@ export default function Comments({ slug }: { slug: string }) {
               borderBottom: '1px solid var(--border)',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                <span style={{ fontSize: 15 }}>{emojiForAuthor(c.author)}</span>
                 <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--green)' }}>
                   {c.author}
                 </span>
