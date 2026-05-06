@@ -1,5 +1,5 @@
 ---
-title: "linkat 개발기 - 링크 아카이빙 서비스"
+title: "linkat 개발기 — 링크 아카이빙 서비스"
 date: 2026-05-04T10:00:00Z
 category: 사이드프로젝트
 tags: [Next.js, Supabase, 크롬익스텐션, 사이드프로젝트]
