@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { getIdentity, type Identity } from '@/lib/identity';
 
 interface Comment {
   id: string;
@@ -22,13 +23,14 @@ function formatDate(iso: string) {
 
 export default function Comments({ slug }: { slug: string }) {
   const [comments, setComments] = useState<Comment[]>([]);
-  const [author, setAuthor] = useState('');
+  const [identity, setIdentity] = useState<Identity | null>(null);
   const [body, setBody] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
+    setIdentity(getIdentity());
     fetch(`/api/comments?slug=${slug}`)
       .then((r) => r.json())
       .then((data) => { if (Array.isArray(data)) setComments(data); });
@@ -36,14 +38,14 @@ export default function Comments({ slug }: { slug: string }) {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    if (!author.trim() || !body.trim()) return;
+    if (!body.trim() || !identity) return;
     setSubmitting(true);
     setError('');
 
     const res = await fetch('/api/comments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ post_slug: slug, author, body }),
+      body: JSON.stringify({ post_slug: slug, author: identity.author, body }),
     });
 
     if (res.ok) {
@@ -105,29 +107,14 @@ export default function Comments({ slug }: { slug: string }) {
           <span style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
             write comment
           </span>
+          {identity && (
+            <span style={{ marginLeft: 'auto', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
+              {identity.emoji} {identity.label}
+            </span>
+          )}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <input
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            placeholder="name"
-            maxLength={40}
-            style={{
-              background: 'var(--surface)',
-              border: '1px solid var(--border)',
-              borderRadius: 6,
-              padding: '8px 12px',
-              fontFamily: 'var(--mono)',
-              fontSize: 13,
-              color: 'var(--text)',
-              outline: 'none',
-              width: '100%',
-              transition: 'border-color 0.15s',
-            }}
-            onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(61,214,140,0.4)')}
-            onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
-          />
           <textarea
             ref={bodyRef}
             value={body}
@@ -161,7 +148,7 @@ export default function Comments({ slug }: { slug: string }) {
             <div style={{ marginLeft: 'auto' }}>
               <button
                 type="submit"
-                disabled={submitting || !author.trim() || !body.trim()}
+                disabled={submitting || !body.trim() || !identity}
                 style={{
                   fontFamily: 'var(--mono)',
                   fontSize: 12,
