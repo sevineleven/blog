@@ -83,9 +83,16 @@ export interface Identity {
   author: string;
 }
 
+function hashIndex(str: string, len: number): number {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+  return Math.abs(h) % len;
+}
+
 export function emojiForAuthor(author: string): string {
   const match = ANIMALS.find((a) => author.includes(a.name));
-  return match ? match.emoji : '👤';
+  if (match) return match.emoji;
+  return ANIMALS[hashIndex(author, ANIMALS.length)].emoji;
 }
 
 function generate(): Identity {
