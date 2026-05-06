@@ -33,7 +33,7 @@ ON posts(author_id, created_at DESC);
 
 이 인덱스는 `WHERE author_id = ?` 조건에는 쓰인다. 근데 `WHERE created_at > ?` 단독 조건에는 쓰이지 않는다. 앞 컬럼부터 순서대로 써야 한다.
 
-## 부분 인덱스 — 인덱스도 필요한 것만
+## 부분 인덱스 - 인덱스도 필요한 것만
 
 ```sql
 CREATE INDEX idx_posts_active

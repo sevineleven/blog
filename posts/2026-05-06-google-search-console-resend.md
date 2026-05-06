@@ -1,5 +1,5 @@
 ---
-title: "블로그 개발기 — 댓글 알림 구현과 구글 검색 등록"
+title: "블로그 개발기 - 댓글 알림 구현과 구글 검색 등록"
 date: 2026-05-06T10:00:00Z
 category: 일상
 tags: [블로그, SEO, Google Search Console, Resend]

@@ -29,7 +29,7 @@ function render(state: State) {
 
 `status`로 분기하면 TypeScript가 알아서 타입을 좁혀준다. 에러 처리할 때 특히 유용하다.
 
-## satisfies — as const랑 뭐가 다르냐면
+## satisfies - as const랑 뭐가 다르냐면
 
 솔직히 처음엔 `as const`랑 뭐가 다른지 몰랐다.
 

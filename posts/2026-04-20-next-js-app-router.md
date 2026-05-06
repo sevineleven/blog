@@ -18,13 +18,13 @@ App Router에서 핵심은 이거다. `'use client'`를 명시하지 않으면 �
 서버에서만 돌아가는 컴포넌트니까 `onClick`도 없고, `useState`도 없다. 처음엔 제약처럼 느껴졌는데 익숙해지고 나면 오히려 편하다. DB 직접 읽고, 환경변수 바로 쓰고, 번들 크기도 줄고.
 
 ```tsx
-// Server Component — async도 그냥 됨
+// Server Component - async도 그냥 됨
 async function PostList() {
   const posts = await db.getPosts();
   return <ul>{posts.map(p => <li key={p.id}>{p.title}</li>)}</ul>;
 }
 
-// Client Component — 파일 맨 위에 이게 있어야 함
+// Client Component - 파일 맨 위에 이게 있어야 함
 'use client';
 function LikeButton() {
   const [liked, setLiked] = useState(false);

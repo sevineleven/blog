@@ -19,7 +19,7 @@ JPA를 쓰다 보면 이론으로 알고 있던 것들이 실제로 터지는 �
 @Service
 public class PostService {
 
-    // 이렇게 하면 안 됨 — 같은 클래스 내 호출은 프록시 우회
+    // 이렇게 하면 안 됨 - 같은 클래스 내 호출은 프록시 우회
     public void outer() {
         this.inner(); // @Transactional(propagation = REQUIRES_NEW) 무시됨
     }
@@ -78,7 +78,7 @@ public class Post {
 
 한 가지 주의할 점은 JPQL이나 `@Query`에서는 `@Where`가 무시될 수 있다는 거다. 직접 작성한 쿼리에는 여전히 조건을 명시해야 한다.
 
-## LAZY인데 왜 쿼리가 바로 나가지? — Lombok `@ToString` 때문이다
+## LAZY인데 왜 쿼리가 바로 나가지? - Lombok `@ToString` 때문이다
 
 `FetchType.LAZY`로 설정했는데 어차피 쿼리가 나간다고 느낀 적이 있었다. 알고 보니 로그 출력하는 곳에서 `toString()`이 연관 컬렉션을 건드리고 있었다.
 
