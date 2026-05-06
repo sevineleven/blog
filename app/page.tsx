@@ -1,8 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { unstable_cache } from 'next/cache';
 import { getAllPosts, getAllTags } from '@/lib/posts';
 import { supabase } from '@/lib/supabase';
 import PostListItem from '@/components/PostListItem';
+
+const getViewsData = unstable_cache(
+  async () => {
+    const { data } = await supabase.from('post_views').select('slug, count');
+    return data ?? [];
+  },
+  ['post-views'],
+  { revalidate: 300 },
+);
 
 export const revalidate = 60;
 
@@ -13,10 +23,8 @@ export default async function Home({
 }) {
   const { tag, sort } = await searchParams;
 
-  const { data: viewsData } = await supabase
-    .from('post_views')
-    .select('slug, count');
-  const viewsMap = Object.fromEntries((viewsData ?? []).map((v) => [v.slug, v.count as number]));
+  const viewsData = await getViewsData();
+  const viewsMap = Object.fromEntries(viewsData.map((v) => [v.slug, v.count as number]));
 
   let posts = getAllPosts().filter((p) => !tag || p.tags.includes(tag));
   const tags = getAllTags();
@@ -69,7 +77,7 @@ export default async function Home({
       {/* 태그 필터 */}
       {tags.length > 0 && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, padding: '28px 0' }}>
-          <Link href={sortHref('latest').replace('/', '') || '/'} style={{
+          <Link href={sort === 'views' ? '/?sort=views' : '/'} style={{
             fontFamily: 'var(--mono)', fontSize: 12, padding: '4px 12px', borderRadius: 5,
             border: `1px solid ${!tag ? 'rgba(61,214,140,0.5)' : 'var(--border)'}`,
             color: !tag ? 'var(--green)' : 'var(--text)', textDecoration: 'none',
