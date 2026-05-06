@@ -88,7 +88,7 @@ export default function SearchModal({ posts, open, onClose }: Props) {
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%', maxWidth: 620, margin: '0 20px',
-          background: '#13131a',
+          background: 'var(--bg)',
           border: '1px solid var(--border)',
           borderRadius: 10,
           overflow: 'hidden',
@@ -100,7 +100,7 @@ export default function SearchModal({ posts, open, onClose }: Props) {
         <div style={{
           display: 'flex', alignItems: 'center', gap: 6,
           padding: '10px 14px',
-          background: '#1c1c24',
+          background: 'var(--surface)',
           borderBottom: '1px solid var(--border)',
         }}>
           <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57' }} />
@@ -154,7 +154,7 @@ export default function SearchModal({ posts, open, onClose }: Props) {
                   padding: '10px 16px',
                   background: i === activeIdx ? 'rgba(61,214,140,0.06)' : 'none',
                   border: 'none',
-                  borderBottom: '1px solid rgba(255,255,255,0.04)',
+                  borderBottom: '1px solid var(--border)',
                   cursor: 'pointer', outline: 'none',
                 }}
               >
@@ -182,7 +182,7 @@ export default function SearchModal({ posts, open, onClose }: Props) {
                 <div style={{ paddingLeft: 20 }}>
                   <span style={{ color: 'var(--muted)', fontSize: 11 }}># </span>
                   <span style={{
-                    color: i === activeIdx ? '#fff' : 'var(--text)',
+                    color: 'var(--text)',
                     fontSize: 13, fontWeight: i === activeIdx ? 500 : 400,
                   }}>
                     {post.title}
@@ -208,7 +208,7 @@ export default function SearchModal({ posts, open, onClose }: Props) {
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           padding: '7px 16px',
           borderTop: '1px solid var(--border)',
-          background: '#1c1c24',
+          background: 'var(--surface)',
         }}>
           <span style={{ fontSize: 11, color: 'var(--muted)' }}>
             {filtered.length} result{filtered.length !== 1 ? 's' : ''}
@@ -217,7 +217,7 @@ export default function SearchModal({ posts, open, onClose }: Props) {
             {[['↑↓', 'navigate'], ['↵', 'open'], ['esc', 'close']].map(([k, l]) => (
               <span key={k} style={{ fontSize: 10, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
                 <kbd style={{
-                  background: 'var(--border)', border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'var(--border)', border: '1px solid var(--border)',
                   borderBottomWidth: 2, borderRadius: 3, padding: '1px 5px', fontSize: 10,
                 }}>{k}</kbd>
                 {l}

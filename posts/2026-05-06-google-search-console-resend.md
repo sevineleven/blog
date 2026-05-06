@@ -19,22 +19,29 @@ Next.js App Router에서는 파일 하나로 자동 생성할 수 있다.
 
 ```ts
 // app/sitemap.ts
-import { MetadataRoute } from 'next';
-import { getAllPosts } from '@/lib/posts';
+import { MetadataRoute } from "next";
+import { getAllPosts } from "@/lib/posts";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = 'https://blog.sevin.dev';
+  const siteUrl = "https://blog.sevin.dev";
   const posts = getAllPosts();
 
   const postEntries = posts.map((post) => ({
     url: `${siteUrl}/posts/${post.slug}`,
-    lastModified: new Date(post.date.match(/(\d{4}-\d{2}-\d{2})/)?.[1] ?? Date.now()),
-    changeFrequency: 'monthly' as const,
+    lastModified: new Date(
+      post.date.match(/(\d{4}-\d{2}-\d{2})/)?.[1] ?? Date.now(),
+    ),
+    changeFrequency: "monthly" as const,
     priority: 0.8,
   }));
 
   return [
-    { url: siteUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
+    {
+      url: siteUrl,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 1,
+    },
     ...postEntries,
   ];
 }
@@ -42,12 +49,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
 ```ts
 // app/robots.ts
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: '*', allow: '/' },
-    sitemap: 'https://blog.sevin.dev/sitemap.xml',
+    rules: { userAgent: "*", allow: "/" },
+    sitemap: "https://blog.sevin.dev/sitemap.xml",
   };
 }
 ```
@@ -68,7 +75,7 @@ export async function generateMetadata({ params }) {
       title: post.title,
       description: post.excerpt,
       url,
-      type: 'article',
+      type: "article",
       publishedTime: post.date,
       tags: post.tags,
     },
@@ -83,7 +90,7 @@ export async function generateMetadata({ params }) {
 
 [Google Search Console](https://search.google.com/search-console)에 접속해서 속성을 추가한다. URL 접두어 방식으로 `https://blog.sevin.dev`를 입력한다.
 
-![구글 콘솔 속성 이미지](/posts/google-search-console-resend/image.png)
+![구글 콘솔 속성 이미지](/posts/google-search-console-resend/google-console.png)
 
 ### 2. 도메인 소유권 인증
 
@@ -97,9 +104,9 @@ google-site-verification=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 **가비아 → My가비아 → 도메인 관리 → sevin.dev → DNS 설정**
 
-| 타입 | 호스트 | 값 |
-|------|--------|-----|
-| TXT | blog | google-site-verification=... |
+| 타입 | 호스트 | 값                           |
+| ---- | ------ | ---------------------------- |
+| TXT  | blog   | google-site-verification=... |
 
 저장 후 Search Console에서 확인 버튼을 누르면 인증 완료된다. DNS 반영에 몇 분 걸릴 수 있다.
 
@@ -134,19 +141,21 @@ Vercel 배포 환경이면 Vercel 대시보드 → Settings → Environment Vari
 
 ```ts
 // app/api/comments/route.ts
-import { Resend } from 'resend';
+import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
   // ... DB 저장
 
-  resend.emails.send({
-    from: 'blog@sevin.dev',
-    to: process.env.NOTIFICATION_EMAIL!,
-    subject: `[블로그] 새 댓글 - ${post_slug}`,
-    text: `${author}: ${body.slice(0, 100)}\n\nhttps://blog.sevin.dev/posts/${post_slug}#comments`,
-  }).catch(console.error);
+  resend.emails
+    .send({
+      from: "blog@sevin.dev",
+      to: process.env.NOTIFICATION_EMAIL!,
+      subject: `[블로그] 새 댓글 - ${post_slug}`,
+      text: `${author}: ${body.slice(0, 100)}\n\nhttps://blog.sevin.dev/posts/${post_slug}#comments`,
+    })
+    .catch(console.error);
 
   return NextResponse.json(data, { status: 201 });
 }
