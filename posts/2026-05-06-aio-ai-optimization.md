@@ -27,8 +27,6 @@ draft: false
 
 ## SEO, AEO, GEO - 용어 정리
 
-여기서 잠깐.
-
 비슷해 보이는 용어들이 있어서 정리해두자.
 
 **SEO (Search Engine Optimization)**
