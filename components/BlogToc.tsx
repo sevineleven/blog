@@ -36,6 +36,7 @@ export default function BlogToc({ headings }: { headings: Heading[] }) {
           <a
             key={id}
             href={`#${id}`}
+            onClick={() => setActive(id)}
             className={`blog-toc-item${level === 3 ? ' blog-toc-h3' : ''}${isActive ? ' blog-toc-active' : ''}`}
           >
             <span className="blog-toc-dot" style={{ background: isActive ? 'var(--green)' : 'var(--border)' }} />
