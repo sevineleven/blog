@@ -15,7 +15,7 @@ function categoryColor(cat: string) {
   return CATEGORY_COLORS[cat] ?? CATEGORY_COLORS['기타'];
 }
 
-export default function PostListItem({ post, index, views = 0 }: { post: PostMeta; index: number; views?: number }) {
+export default function PostListItem({ post, index }: { post: PostMeta; index: number }) {
   const cc = categoryColor(post.category);
   return (
     <Link href={`/posts/${post.slug}`} style={{ textDecoration: 'none' }}>
@@ -68,12 +68,7 @@ export default function PostListItem({ post, index, views = 0 }: { post: PostMet
                 </span>
               ))}
 
-              <div style={{ display: 'flex', gap: 10, marginLeft: 'auto', flexShrink: 0 }}>
-                {views > 0 && (
-                  <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)' }}>
-                    {views} {views === 1 ? 'view' : 'views'}
-                  </span>
-                )}
+              <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
                 <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)' }}>
                   {post.readTime} min read
                 </span>

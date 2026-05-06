@@ -14,11 +14,13 @@ export default function PostList({ posts, tags }: { posts: PostMeta[]; tags: str
   const [viewsMap, setViewsMap] = useState<Record<string, number>>({});
 
   useEffect(() => {
-    fetch('/api/views')
-      .then((r) => r.json())
-      .then((data) => setViewsMap(data))
-      .catch(() => {});
-  }, []);
+    if (sort === 'views') {
+      fetch('/api/views')
+        .then((r) => r.json())
+        .then((data) => setViewsMap(data))
+        .catch(() => {});
+    }
+  }, [sort]);
 
   const setParams = useCallback((newTag?: string, newSort?: string) => {
     const params = new URLSearchParams();
@@ -102,7 +104,7 @@ export default function PostList({ posts, tags }: { posts: PostMeta[]; tags: str
           </p>
         )}
         {filtered.map((post, i) => (
-          <PostListItem key={post.slug} post={post} index={i} views={viewsMap[post.slug] ?? 0} />
+          <PostListItem key={post.slug} post={post} index={i} />
         ))}
       </div>
     </>
