@@ -72,6 +72,7 @@ html, body {
   font-size: 15px;
   line-height: 1.75;
   min-height: 100vh;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -130,6 +131,13 @@ html, body {
   line-height: 18px;
   color: var(--muted);
 }
+
+@media (max-width: 640px) {
+  .search-kbd { display: none; }
+}
+
+/* nav 하단 행 webkit 스크롤바 숨김 */
+nav div::-webkit-scrollbar { display: none; }
 
 /* ── Post list ──────────────────────────────────── */
 

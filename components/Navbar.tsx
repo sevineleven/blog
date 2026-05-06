@@ -72,15 +72,25 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
           justifyContent: 'space-between',
           height: 40,
           borderBottom: '1px solid var(--border)',
+          gap: 8,
+          overflow: 'hidden',
         }}>
-          <span style={{ fontFamily: 'var(--mono)', fontSize: 11 }}>
+          <span style={{
+            fontFamily: 'var(--mono)',
+            fontSize: 11,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            minWidth: 0,
+            flex: 1,
+          }}>
             <span style={{ color: 'var(--green)' }}>sevineleven</span>
             <span style={{ color: 'var(--muted)' }}>@dev</span>
             <span style={{ color: 'var(--muted)', margin: '0 6px' }}>:</span>
             <span style={{ color: 'var(--blue)' }}>{getPath()}</span>
           </span>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
             <ThemeToggle />
             <button className="search-btn" onClick={onSearchOpen}>
               <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
@@ -88,13 +98,13 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
                 <path d="M11 11L14.5 14.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
               </svg>
               search
-              <kbd>⌘K</kbd>
+              <kbd className="search-kbd">⌘K</kbd>
             </button>
           </div>
         </div>
 
         {/* 하단: 네비 링크 (zsh 색상) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, height: 44 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, height: 44, overflowX: 'auto', scrollbarWidth: 'none' }}>
           {/* 동적 cd .. */}
           {(() => {
             const parent = getParent(pathname);
