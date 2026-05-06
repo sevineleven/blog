@@ -83,7 +83,7 @@ export async function generateMetadata({ params }) {
 
 [Google Search Console](https://search.google.com/search-console)에 접속해서 속성을 추가한다. URL 접두어 방식으로 `https://blog.sevin.dev`를 입력한다.
 
-![구글 콘솔 속성 이미지](/image.png)
+![구글 콘솔 속성 이미지](/posts/google-search-console-resend/image.png)
 
 ### 2. 도메인 소유권 인증
 

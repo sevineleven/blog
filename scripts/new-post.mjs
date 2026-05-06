@@ -69,7 +69,11 @@ draft: true
   if (!fs.existsSync(POSTS_DIR)) fs.mkdirSync(POSTS_DIR);
   fs.writeFileSync(filepath, content, 'utf-8');
 
+  const imgDir = path.join(__dirname, '..', 'public', 'posts', rawSlug);
+  if (!fs.existsSync(imgDir)) fs.mkdirSync(imgDir, { recursive: true });
+
   console.log(`\n✓ 생성됨: posts/${filename}`);
+  console.log(`  이미지 폴더: public/posts/${rawSlug}/`);
   console.log(`  URL: /posts/${rawSlug}`);
   console.log(`  category: ${category}`);
   console.log(`  draft: true  →  완성 후 false로 변경하면 publish됩니다.\n`);
