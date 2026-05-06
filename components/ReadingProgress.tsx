@@ -23,8 +23,8 @@ export default function ReadingProgress() {
       left: 0,
       height: 2,
       width: '0%',
-      background: 'var(--green)',
-      boxShadow: '0 0 6px var(--green)',
+      background: 'var(--progress)',
+      boxShadow: '0 0 6px var(--progress)',
       zIndex: 100,
       pointerEvents: 'none',
     }} />
