@@ -54,6 +54,20 @@ export default function Sidebar() {
                 sevineleven
               </a>
             </div>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 2 }}>
+              <span style={{ color: 'var(--blue)', flexShrink: 0 }}>status</span>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                <span style={{
+                  display: 'inline-block',
+                  width: 6,
+                  height: 6,
+                  borderRadius: '50%',
+                  background: 'var(--green)',
+                  boxShadow: '0 0 6px var(--green)',
+                }} />
+                <span style={{ color: 'var(--green)' }}>online</span>
+              </span>
+            </div>
           </div>
         </div>
       </div>

@@ -4,6 +4,8 @@ import { getPost, getAllPosts, getAdjacentPosts } from '@/lib/posts';
 import Comments from '@/components/Comments';
 import ViewTracker from '@/components/ViewTracker';
 import BlogToc from '@/components/BlogToc';
+import ReadingProgress from '@/components/ReadingProgress';
+import ProseContent from '@/components/ProseContent';
 import '@/app/posts/prose.css';
 
 export async function generateStaticParams() {
@@ -51,6 +53,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <div>
+      <ReadingProgress />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <BlogToc headings={post.headings} />
       {/* 브레드크럼 */}
@@ -103,7 +106,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', marginBottom: 40 }} />
 
       {/* 본문 */}
-      <div className="prose" dangerouslySetInnerHTML={{ __html: post.content }} />
+      <ProseContent html={post.content} />
 
       {/* 이전/다음 */}
       <div style={{
