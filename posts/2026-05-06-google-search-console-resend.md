@@ -83,7 +83,7 @@ export async function generateMetadata({ params }) {
 
 [Google Search Console](https://search.google.com/search-console)에 접속해서 속성을 추가한다. URL 접두어 방식으로 `https://blog.sevin.dev`를 입력한다.
 
-~~~캡쳐: Search Console 속성 추가 화면 (URL 접두어 입력)~~~
+![구글 콘솔 속성 이미지](image.png)
 
 ### 2. 도메인 소유권 인증
 
@@ -101,17 +101,11 @@ google-site-verification=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 |------|--------|-----|
 | TXT | blog | google-site-verification=... |
 
-~~~캡쳐: 가비아 DNS TXT 레코드 추가 화면~~~
-
 저장 후 Search Console에서 확인 버튼을 누르면 인증 완료된다. DNS 반영에 몇 분 걸릴 수 있다.
-
-~~~캡쳐: Search Console 소유권 확인 완료 화면~~~
 
 ### 3. sitemap 제출
 
 Search Console 왼쪽 메뉴 **Sitemaps**에서 `sitemap.xml`을 제출한다.
-
-~~~캡쳐: Sitemaps 제출 화면~~~
 
 제출 후 Google이 크롤링을 시작하는 데 며칠 걸린다. **페이지 색인 생성** 탭에서 진행 상황을 확인할 수 있다.
 
@@ -122,8 +116,6 @@ Search Console 왼쪽 메뉴 **Sitemaps**에서 `sitemap.xml`을 제출한다.
 ### Resend 설정
 
 Resend에 가입하고 API 키를 발급받는다. 그리고 발신 도메인을 등록해야 한다. 나는 `blog.sevin.dev`로 보내도록 설정했다.
-
-~~~캡쳐: Resend 도메인 설정 화면~~~
 
 도메인 인증도 가비아 DNS에서 Resend가 안내하는 레코드를 추가하면 된다.
 
