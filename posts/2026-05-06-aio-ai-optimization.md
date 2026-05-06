@@ -2,7 +2,7 @@
 title: "블로그 개발기 - AI도 내 블로그를 찾게 하자"
 date: 2026-05-06T01:32:00Z
 category: 일상
-tags: [블로그, AIO, SEO, AI]
+tags: [블로그, AI]
 excerpt: "네이버에서 구글로, 구글에서 AI로. 검색 방식이 바뀌면 최적화 방식도 바뀐다."
 draft: false
 ---

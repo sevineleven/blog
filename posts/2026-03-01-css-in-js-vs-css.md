@@ -2,7 +2,7 @@
 title: "CSS-in-JS vs 순수 CSS, 뭘 써야 할까"
 date: 2026-03-01T11:17:00Z
 category: 프론트엔드
-tags: [CSS, 프론트엔드]
+tags: [프론트엔드]
 excerpt: "styled-components 쓰다가 App Router에서 막혀서 결국 갈아엎은 이야기."
 draft: false
 ---

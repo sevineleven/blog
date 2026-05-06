@@ -2,7 +2,7 @@
 title: "TypeScript 유용한 패턴들"
 date: 2026-03-28T07:55:00Z
 category: 프론트엔드
-tags: [TypeScript, 프론트엔드, 개발]
+tags: [프론트엔드]
 excerpt: "쓸 때마다 '아 이게 있었지' 하고 찾아보게 되는 것들 모음."
 draft: false
 ---

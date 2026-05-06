@@ -2,7 +2,7 @@
 title: "블로그 개발기 - 서버가 필요 없는데 서버를 만들었다"
 date: 2026-04-30T14:18:00Z
 category: 일상
-tags: [블로그, 회고, Spring, 개발]
+tags: [블로그, 회고]
 excerpt: "블로그 하나 만들면서 과설계했다가 다 갈아엎은 얘기."
 draft: false
 ---

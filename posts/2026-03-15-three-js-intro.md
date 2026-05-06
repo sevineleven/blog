@@ -2,7 +2,7 @@
 title: "Three.js로 3D 그래프 만들기"
 date: 2026-03-15T01:33:00Z
 category: 프론트엔드
-tags: [Three.js, 프론트엔드, 개발]
+tags: [프론트엔드]
 excerpt: "이 블로그 universe 뷰 만들면서 처음 Three.js를 제대로 써봤다."
 draft: false
 ---

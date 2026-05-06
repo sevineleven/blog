@@ -2,7 +2,7 @@
 title: "Next.js App Router 제대로 이해하기"
 date: 2026-04-20T02:08:00Z
 category: 프론트엔드
-tags: [Next.js, 프론트엔드, 개발]
+tags: [프론트엔드]
 excerpt: "Page Router 쓰다가 App Router로 넘어오면서 한동안 계속 헷갈렸던 것들."
 draft: false
 ---

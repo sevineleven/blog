@@ -2,7 +2,7 @@
 title: "블로그 개발기 - 블로그를 시작하며"
 date: 2026-05-04T05:22:00Z
 category: 일상
-tags: [일상, 개발]
+tags: [일상]
 excerpt: "배운 걸 기록하지 않으면 금방 잊는다는 걸 몸으로 배웠다."
 draft: false
 ---

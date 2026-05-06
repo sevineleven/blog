@@ -2,7 +2,7 @@
 title: "PostgreSQL 인덱스 제대로 쓰기"
 date: 2026-02-14T04:44:00Z
 category: 백엔드
-tags: [PostgreSQL, 데이터베이스, 백엔드]
+tags: [데이터베이스, 백엔드]
 excerpt: "슬로우 쿼리 알림 받고 나서야 인덱스를 진지하게 보기 시작했다."
 draft: false
 ---

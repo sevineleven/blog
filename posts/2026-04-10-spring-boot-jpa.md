@@ -2,7 +2,7 @@
 title: "Spring Boot + JPA 삽질 모음"
 date: 2026-04-10T13:41:00Z
 category: 백엔드
-tags: [Spring, JPA, 백엔드, Java]
+tags: [백엔드]
 excerpt: "이론으로 알던 것들이 실제로 터지고 나서야 제대로 이해했다."
 draft: false
 ---
