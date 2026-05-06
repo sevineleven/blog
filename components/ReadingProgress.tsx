@@ -10,7 +10,7 @@ export default function ReadingProgress() {
       const el = document.documentElement;
       const total = el.scrollHeight - el.clientHeight;
       const pct = total > 0 ? (el.scrollTop / total) * 100 : 0;
-      if (barRef.current) barRef.current.style.width = `${pct}%`;
+        if (barRef.current) barRef.current.style.width = `${pct}%`;
     };
     window.addEventListener('scroll', update, { passive: true });
     return () => window.removeEventListener('scroll', update);
@@ -24,6 +24,7 @@ export default function ReadingProgress() {
       height: 2,
       width: '0%',
       background: 'var(--green)',
+      boxShadow: '0 0 6px var(--green)',
       zIndex: 100,
       pointerEvents: 'none',
     }} />
