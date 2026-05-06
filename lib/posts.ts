@@ -141,6 +141,17 @@ export async function getPost(slug: string): Promise<Post | null> {
   };
 }
 
+export function getPostRawContent(slug: string): string | null {
+  if (!fs.existsSync(POSTS_DIR)) return null;
+  const filename = fs.readdirSync(POSTS_DIR)
+    .filter((f) => f.endsWith('.md'))
+    .find((f) => filenameToSlug(f) === slug);
+  if (!filename) return null;
+  const raw = fs.readFileSync(path.join(POSTS_DIR, filename), 'utf-8');
+  const { content } = matter(raw);
+  return content;
+}
+
 export function getAllTags(): string[] {
   const posts = getAllPosts();
   const tagSet = new Set(posts.flatMap((p) => p.tags));

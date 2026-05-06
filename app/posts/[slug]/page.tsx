@@ -37,8 +37,21 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   const { prev, next } = getAdjacentPosts(slug);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    keywords: post.tags.join(', '),
+    url: `https://blog.sevin.dev/posts/${slug}`,
+    author: { '@type': 'Person', name: 'sevin', url: 'https://blog.sevin.dev' },
+    publisher: { '@type': 'Organization', name: 'sevin.dev', url: 'https://blog.sevin.dev' },
+  };
+
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <BlogToc headings={post.headings} />
       {/* 브레드크럼 */}
       <div style={{

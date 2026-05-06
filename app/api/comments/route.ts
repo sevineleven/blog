@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get('slug');
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
 
     if (error) { console.error('[POST comments]', error); return NextResponse.json({ error: error.message }, { status: 500 }); }
 
-    resend.emails.send({
+    resend?.emails.send({
       from: 'blog@sevin.dev',
       to: process.env.NOTIFICATION_EMAIL!,
       subject: `[블로그] 새 댓글 - ${post_slug}`,
