@@ -63,14 +63,17 @@ export default function ProseContent({ html }: { html: string }) {
       const btn = document.createElement('button');
       btn.className = 'copy-btn';
       btn.textContent = 'copy';
+      let copyTimer: ReturnType<typeof setTimeout> | null = null;
       btn.onclick = async () => {
         const text = code?.innerText ?? '';
         await navigator.clipboard.writeText(text);
+        if (copyTimer) clearTimeout(copyTimer);
         btn.textContent = 'copied!';
         btn.classList.add('copied');
-        setTimeout(() => {
+        copyTimer = setTimeout(() => {
           btn.textContent = 'copy';
           btn.classList.remove('copied');
+          copyTimer = null;
         }, 2000);
       };
       header.appendChild(btn);
