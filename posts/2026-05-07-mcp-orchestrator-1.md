@@ -4,7 +4,7 @@ date: 2026-05-07T10:00:00Z
 category: 백엔드
 tags: [백엔드, Spring, MCP]
 excerpt: "MCP를 클라이언트로만 쓰다가, 직접 서버를 만들어야 하는 상황이 됐다."
-draft: true
+draft: false
 series: "MCP 오케스트레이터 구축기"
 ---
 
@@ -26,7 +26,6 @@ series: "MCP 오케스트레이터 구축기"
 
 MCP 자체는 써봤다. 커서나 Claude에 외부 MCP 서버를 연결해서 쓰는 정도. 그런데 직접 서버를 구현해본 적은 없었다. 통신 규약도 내가 직접 정의해야 하는 상황이라, 클라이언트로 쓰는 것과 서버를 만드는 건 다른 얘기라는 걸 실감했다. 그래서 일단 직접 만들어보기로 했다.
 
-이 시리즈는 그 과정의 기록이다.
 
 ---
 
@@ -85,7 +84,7 @@ dependencies {
 
 Spring Boot 4.x 기준이라 milestone 저장소 추가가 필요하다.
 
-> **삽질 포인트**: `JAVA_HOME`이 JDK 8로 잡혀있으면 Gradle 실행 자체가 안 된다. Gradle은 JDK 17+ 필요.
+> **삽질 포인트**: 사내 대부분 프로젝트가 아직 JAVA 8 LTS로 이루어져있는데, `JAVA_HOME`이 JDK 8로 잡혀있으면 Gradle 실행 자체가 안 된다. Gradle은 JDK 17+ 필요.
 > ```bash
 > export JAVA_HOME="/c/Users/{user}/.jdks/liberica-21.0.6"
 > ```
@@ -194,7 +193,7 @@ LLM이 스스로 `random` 도구가 필요하다고 판단하고, 인자까지 �
 
 ## 근데 이게 MCP야?
 
-솔직히 말하면 이 단계에서 MCP 프로토콜은 개입하지 않는다.
+아직 이 단계에서 MCP 프로토콜은 개입하지 않는다.
 
 `DefaultToolCallingManager`가 인-프로세스로 도구를 직접 호출하는 방식이다. MCP 서버는 Inspector 연결용으로만 떠있는 상태.
 
