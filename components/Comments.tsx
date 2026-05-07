@@ -110,7 +110,7 @@ export default function Comments({ slug }: { slug: string }) {
           </span>
           {identity && (
             <span style={{ marginLeft: 'auto', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
-              {identity.emoji} {identity.label}
+              {identity.emoji} {identity.author}
             </span>
           )}
         </div>

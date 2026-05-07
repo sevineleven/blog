@@ -78,7 +78,6 @@ const ANIMALS: { name: string; emoji: string }[] = [
 ];
 
 export interface Identity {
-  label: string;
   emoji: string;
   author: string;
 }
@@ -99,7 +98,6 @@ function generate(): Identity {
   const adj = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
   const animal = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
   return {
-    label: `${adj} ${animal.name}`,
     emoji: animal.emoji,
     author: `${adj} ${animal.name}`,
   };
