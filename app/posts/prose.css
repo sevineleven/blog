@@ -126,6 +126,7 @@
 /* copy 버튼 */
 .copy-btn {
   flex-shrink: 0;
+  margin-left: auto;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   color: var(--muted);
