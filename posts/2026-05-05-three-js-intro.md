@@ -1,13 +1,16 @@
 ﻿---
-title: "Three.js로 3D 그래프 만들기"
-date: 2026-03-15T01:33:00Z
-category: 프론트엔드
-tags: [프론트엔드]
-excerpt: "이 블로그 universe 뷰 만들면서 처음 Three.js를 제대로 써봤다."
+title: "블로그 개발기 - Obsidian처럼, universe 뷰 만들기"
+date: 2026-05-05T01:33:00Z
+category: 일상
+tags: [블로그, 프론트엔드]
+excerpt: "Obsidian graph view 보고 이걸 블로그에 넣고 싶었다. Three.js로 포스트들을 3D 공간에 띄운 과정."
 draft: false
+series: "블로그 개발기"
 ---
 
-이 블로그의 universe 페이지를 만들면서 Three.js를 처음 제대로 써봤다. 예전에 한 번 튜토리얼 따라한 적은 있었는데 그건 그냥 큐브 돌린 거라 뭔가 만든 느낌이 없었고.
+Obsidian의 graph view를 처음 봤을 때부터 이걸 블로그에 넣고 싶었다. 포스트들이 태그로 연결되는 걸 3D로 시각화하면 재밌겠다 싶어서. 근데 2D로 하기엔 아쉬워서 Three.js로 3D로 만들어봤다. 그렇게 만든 게 이 블로그의 universe 페이지다.
+
+Three.js를 여기서 처음 제대로 써봤다. 예전에 한 번 튜토리얼 따라한 적은 있었는데 그건 그냥 큐브 돌린 거라 뭔가 만든 느낌이 없었고.
 
 ## 기본 구조는 세 줄
 

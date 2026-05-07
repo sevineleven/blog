@@ -87,7 +87,7 @@ export default function Navbar({ onSearchOpen, containerStyle }: NavbarProps) {
             <span style={{ color: 'var(--green)' }}>sevineleven</span>
             <span style={{ color: 'var(--muted)' }}>@dev</span>
             <span style={{ color: 'var(--muted)', margin: '0 6px' }}>:</span>
-            <span style={{ color: 'var(--blue)' }}>{getPath()}</span>
+            <span style={{ color: 'var(--blue)' }}>{getPath()}</span><span className="terminal-cursor" />
           </span>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>

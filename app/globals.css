@@ -314,3 +314,27 @@ nav div::-webkit-scrollbar { display: none; }
   .blog-layout { max-width: 680px; padding: 48px 28px 80px; gap: 0; }
   .whoami-mobile { display: block; }
 }
+
+.series-link {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.series-link:hover {
+  color: var(--text);
+}
+
+@keyframes terminal-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.terminal-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 13px;
+  background: var(--blue);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: terminal-blink 1.1s step-end infinite;
+}

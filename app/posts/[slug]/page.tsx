@@ -1,11 +1,12 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getPost, getAllPosts, getAdjacentPosts } from '@/lib/posts';
+import { getPost, getAllPosts, getAdjacentPosts, getSeriesPosts } from '@/lib/posts';
 import Comments from '@/components/Comments';
 import ViewTracker from '@/components/ViewTracker';
 import BlogToc from '@/components/BlogToc';
 import ReadingProgress from '@/components/ReadingProgress';
 import ProseContent from '@/components/ProseContent';
+import SeriesBox from '@/components/SeriesBox';
 import '@/app/posts/prose.css';
 
 export async function generateStaticParams() {
@@ -38,6 +39,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
   if (!post) notFound();
 
   const { prev, next } = getAdjacentPosts(slug);
+  const seriesPosts = post.series ? getSeriesPosts(post.series) : null;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -104,6 +106,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       </header>
 
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', marginBottom: 40 }} />
+
+      {seriesPosts && post.series && (
+        <SeriesBox series={post.series} posts={seriesPosts} currentSlug={slug} />
+      )}
 
       {/* 본문 */}
       <ProseContent html={post.content} />

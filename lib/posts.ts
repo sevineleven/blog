@@ -27,6 +27,7 @@ export interface PostMeta {
   draft: boolean;
   excerpt: string;
   readTime: number; // minutes
+  series?: string;
 }
 
 export interface Heading {
@@ -92,6 +93,7 @@ export function getAllPosts(includeDrafts = false): PostMeta[] {
         draft: data.draft ?? false,
         excerpt: getExcerpt(content, data.excerpt),
         readTime: Math.max(1, Math.round(wordCount / 200)),
+        series: data.series ?? undefined,
       };
     })
     .filter((p) => includeDrafts || !p.draft)
@@ -136,6 +138,7 @@ export async function getPost(slug: string): Promise<Post | null> {
     draft: data.draft ?? false,
     excerpt: getExcerpt(content, data.excerpt),
     readTime: Math.max(1, Math.round(wordCount / 200)),
+    series: data.series ?? undefined,
     content: String(processed),
     headings: extractHeadings(content),
   };
@@ -156,6 +159,12 @@ export function getAllTags(): string[] {
   const posts = getAllPosts();
   const tagSet = new Set(posts.flatMap((p) => p.tags));
   return Array.from(tagSet).sort();
+}
+
+export function getSeriesPosts(series: string): PostMeta[] {
+  return getAllPosts()
+    .filter((p) => p.series === series)
+    .sort((a, b) => (a.date < b.date ? -1 : 1));
 }
 
 export function getAdjacentPosts(slug: string): { prev: PostMeta | null; next: PostMeta | null } {

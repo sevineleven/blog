@@ -5,6 +5,7 @@ category: 일상
 tags: [블로그, AI]
 excerpt: "네이버에서 구글로, 구글에서 AI로. 검색 방식이 바뀌면 최적화 방식도 바뀐다."
 draft: false
+series: "블로그 개발기"
 ---
 
 블로그를 만들고 나서 한동안 고도화 작업을 했다. sitemap, robots.txt, OG 태그, Google Search Console 등록. 구글에 잘 노출되게 하는 것들.

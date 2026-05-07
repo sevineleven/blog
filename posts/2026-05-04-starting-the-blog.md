@@ -5,6 +5,7 @@ category: 일상
 tags: [일상]
 excerpt: "배운 걸 기록하지 않으면 금방 잊는다는 걸 몸으로 배웠다."
 draft: false
+series: "블로그 개발기"
 ---
 
 ## 사실 미뤄왔다

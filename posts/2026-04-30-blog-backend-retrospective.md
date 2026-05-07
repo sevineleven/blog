@@ -5,6 +5,7 @@ category: 일상
 tags: [블로그, 회고]
 excerpt: "블로그 하나 만들면서 과설계했다가 다 갈아엎은 얘기."
 draft: false
+series: "블로그 개발기"
 ---
 
 이 블로그의 백엔드는 원래 Spring Boot + PostgreSQL이었다.
