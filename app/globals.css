@@ -266,7 +266,7 @@ nav div::-webkit-scrollbar { display: none; }
 }
 .blog-toc-item:hover { color: var(--dim, #9090b0); }
 .blog-toc-h3 { padding-left: 12px; }
-.blog-toc-active { color: var(--green) !important; }
+.blog-toc-active { color: var(--progress) !important; }
 
 .blog-toc-dot {
   display: inline-block;
