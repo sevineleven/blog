@@ -2,8 +2,15 @@ import { Suspense } from 'react';
 import Image from 'next/image';
 import { getAllPosts, getAllTags } from '@/lib/posts';
 import PostList from '@/components/PostList';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: 'https://blog.sevin.dev',
+  },
+};
 
 export default function Home() {
   const posts = getAllPosts();

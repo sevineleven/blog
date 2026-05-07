@@ -22,8 +22,12 @@ const doHyeon = Do_Hyeon({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://blog.sevin.dev'),
   title: 'sevin.dev | blog',
   description: '배우고 기록하는 개발자의 공간',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: 'sevin.dev | blog',
     description: '배우고 기록하는 개발자의 공간',
