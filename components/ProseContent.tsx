@@ -84,6 +84,48 @@ export default function ProseContent({ html }: { html: string }) {
       wrapper.appendChild(header);
       wrapper.appendChild(outerEl);
     });
+
+    const openLightbox = (svg: SVGElement) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'svg-lightbox';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-label', svg.getAttribute('aria-label') ?? '확대된 다이어그램');
+
+      const clone = svg.cloneNode(true) as SVGElement;
+      clone.removeAttribute('style');
+      overlay.appendChild(clone);
+
+      const close = () => {
+        overlay.remove();
+        document.removeEventListener('keydown', onKey);
+        document.body.style.overflow = prevOverflow;
+      };
+      const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
+
+      overlay.addEventListener('click', close);
+      document.addEventListener('keydown', onKey);
+      const prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      document.body.appendChild(overlay);
+    };
+
+    ref.current.querySelectorAll<SVGElement>('svg').forEach((svg) => {
+      if (svg.dataset.zoomBound === '1') return;
+      svg.dataset.zoomBound = '1';
+      svg.classList.add('zoomable');
+      svg.setAttribute('role', svg.getAttribute('role') ?? 'img');
+      svg.setAttribute('tabindex', '0');
+      svg.addEventListener('click', () => openLightbox(svg));
+      svg.addEventListener('keydown', (e) => {
+        const ke = e as KeyboardEvent;
+        if (ke.key === 'Enter' || ke.key === ' ') {
+          ke.preventDefault();
+          openLightbox(svg);
+        }
+      });
+    });
   }, [html]);
 
   return <div ref={ref} className="prose" dangerouslySetInnerHTML={{ __html: html }} />;

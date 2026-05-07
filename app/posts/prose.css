@@ -215,3 +215,41 @@
   border-top: 1px solid var(--border);
   margin: 2.4rem 0;
 }
+
+/* 확대 가능한 SVG 다이어그램 */
+.prose svg.zoomable {
+  cursor: zoom-in;
+  transition: opacity 0.15s;
+}
+.prose svg.zoomable:hover { opacity: 0.85; }
+.prose svg.zoomable:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 4px;
+}
+
+.svg-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  cursor: zoom-out;
+  animation: svg-lightbox-fade 0.15s ease-out;
+}
+.svg-lightbox > svg {
+  width: auto;
+  height: auto;
+  max-width: 95vw;
+  max-height: 92vh;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+@keyframes svg-lightbox-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
