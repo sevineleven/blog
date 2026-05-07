@@ -54,37 +54,68 @@
 .prose pre {
   margin: 1.6rem 0;
   border-radius: 10px;
-  overflow-x: auto;
+  overflow: hidden;
   border: 1px solid var(--border);
   background: var(--surface) !important;
-  position: relative;
 }
 .prose pre > code {
   display: block;
-  padding: 1.2rem 1.4rem;
+  padding: 1.1rem 1.4rem;
   font-size: 13px;
   line-height: 1.75;
   font-family: 'JetBrains Mono', monospace;
   background: transparent !important;
+  overflow-x: auto;
+}
+
+/* 터미널 헤더 */
+.pre-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  background: var(--subtle);
+  border-bottom: 1px solid var(--border);
+}
+
+.traffic-dots {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.traffic-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.traffic-dots span:nth-child(1) { background: #ff5f57; }
+.traffic-dots span:nth-child(2) { background: #febc2e; }
+.traffic-dots span:nth-child(3) { background: #28c840; }
+
+.lang-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  flex: 1;
+  text-align: center;
 }
 
 /* copy 버튼 */
 .copy-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  margin-left: auto;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   color: var(--muted);
-  background: var(--border);
+  background: transparent;
   border: 1px solid transparent;
   border-radius: 4px;
-  padding: 3px 8px;
+  padding: 2px 8px;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.15s, color 0.15s, border-color 0.15s;
 }
-.prose pre:hover .copy-btn { opacity: 1; }
+.pre-header:hover .copy-btn { opacity: 1; }
 .copy-btn:hover { color: var(--text); border-color: var(--muted); }
 .copy-btn.copied { color: var(--green); border-color: rgba(61,214,140,0.4); opacity: 1; }
 
