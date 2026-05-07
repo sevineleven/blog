@@ -2,6 +2,26 @@
 
 import { useEffect, useRef } from 'react';
 
+const LANG_CMD: Record<string, string> = {
+  typescript: 'vim',
+  tsx:        'vim',
+  javascript: 'node',
+  jsx:        'node',
+  bash:       'zsh',
+  shell:      'zsh',
+  sh:         'zsh',
+  css:        'vim',
+  html:       'vim',
+  json:       'cat',
+  sql:        'psql',
+  python:     'python3',
+  java:       'javac',
+  go:         'go run',
+  rust:       'cargo run',
+  yaml:       'cat',
+  toml:       'cat',
+};
+
 export default function ProseContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -12,6 +32,7 @@ export default function ProseContent({ html }: { html: string }) {
 
       const code = pre.querySelector('code');
       const lang = code?.getAttribute('data-language') ?? '';
+      const cmd = lang ? (LANG_CMD[lang] ?? 'cat') : null;
 
       const header = document.createElement('div');
       header.className = 'pre-header';
@@ -21,10 +42,10 @@ export default function ProseContent({ html }: { html: string }) {
       dots.innerHTML = '<span></span><span></span><span></span>';
       header.appendChild(dots);
 
-      if (lang) {
+      if (cmd && lang) {
         const label = document.createElement('span');
         label.className = 'lang-label';
-        label.textContent = lang;
+        label.innerHTML = `<span class="lang-cmd">$ ${cmd}</span> <span class="lang-name">${lang}</span>`;
         header.appendChild(label);
       }
 
