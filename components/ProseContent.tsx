@@ -38,8 +38,12 @@ export default function ProseContent({ html }: { html: string }) {
       header.className = 'pre-header';
 
       const dots = document.createElement('span');
-      dots.className = 'traffic-dots';
-      dots.innerHTML = '<span></span><span></span><span></span>';
+      dots.style.cssText = 'display:flex;gap:6px;align-items:center;flex-shrink:0;';
+      ['#ff5f57', '#febc2e', '#28c840'].forEach((color) => {
+        const dot = document.createElement('span');
+        dot.style.cssText = `width:12px;height:12px;border-radius:50%;background:${color};display:block;flex-shrink:0;`;
+        dots.appendChild(dot);
+      });
       header.appendChild(dots);
 
       if (cmd && lang) {
