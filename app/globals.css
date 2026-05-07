@@ -315,6 +315,29 @@ nav div::-webkit-scrollbar { display: none; }
   .whoami-mobile { display: block; }
 }
 
+.series-badge {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--progress);
+  background: rgba(61, 214, 140, 0.08);
+  border: 1px solid rgba(61, 214, 140, 0.2);
+  padding: 1px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+:root[data-theme="light"] .series-badge {
+  background: rgba(112, 68, 204, 0.08);
+  border-color: rgba(112, 68, 204, 0.2);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .series-badge {
+    background: rgba(112, 68, 204, 0.08);
+    border-color: rgba(112, 68, 204, 0.2);
+  }
+}
+
 .series-link {
   color: var(--muted);
   text-decoration: none;

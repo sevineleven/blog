@@ -22,6 +22,15 @@ export default function PostList({ posts, tags }: { posts: PostMeta[]; tags: str
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [router]);
 
+  const seriesMap = new Map<string, PostMeta[]>();
+  posts.forEach((p) => {
+    if (p.series) {
+      if (!seriesMap.has(p.series)) seriesMap.set(p.series, []);
+      seriesMap.get(p.series)!.push(p);
+    }
+  });
+  seriesMap.forEach((sp, key) => seriesMap.set(key, [...sp].sort((a, b) => a.date < b.date ? -1 : 1)));
+
   const filtered   = tag ? posts.filter((p) => p.tags.includes(tag)) : posts;
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const paginated  = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
@@ -77,9 +86,11 @@ export default function PostList({ posts, tags }: { posts: PostMeta[]; tags: str
             no posts found.
           </p>
         )}
-        {paginated.map((post, i) => (
-          <PostListItem key={post.slug} post={post} index={(page - 1) * PER_PAGE + i} />
-        ))}
+        {paginated.map((post, i) => {
+          const sp = post.series ? seriesMap.get(post.series) : undefined;
+          const seriesInfo = sp ? { index: sp.findIndex((p) => p.slug === post.slug) + 1, total: sp.length } : undefined;
+          return <PostListItem key={post.slug} post={post} index={(page - 1) * PER_PAGE + i} seriesInfo={seriesInfo} />;
+        })}
       </div>
 
       {/* 페이지네이션 */}

@@ -15,7 +15,7 @@ function categoryColor(cat: string) {
   return CATEGORY_COLORS[cat] ?? CATEGORY_COLORS['기타'];
 }
 
-export default function PostListItem({ post, index }: { post: PostMeta; index: number }) {
+export default function PostListItem({ post, index, seriesInfo }: { post: PostMeta; index: number; seriesInfo?: { index: number; total: number } }) {
   const cc = categoryColor(post.category);
   return (
     <Link href={`/posts/${post.slug}`} style={{ textDecoration: 'none' }}>
@@ -67,6 +67,12 @@ export default function PostListItem({ post, index }: { post: PostMeta; index: n
                   #{t}
                 </span>
               ))}
+
+              {seriesInfo && (
+                <span className="series-badge">
+                  series {seriesInfo.index}/{seriesInfo.total}
+                </span>
+              )}
 
               <div style={{ marginLeft: 'auto', flexShrink: 0 }}>
                 <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)' }}>
