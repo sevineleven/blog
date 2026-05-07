@@ -107,7 +107,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', marginBottom: 40 }} />
 
-      {seriesPosts && post.series && (
+      {seriesPosts && seriesPosts.length > 0 && post.series && (
         <SeriesBox series={post.series} posts={seriesPosts} currentSlug={slug} />
       )}
 
