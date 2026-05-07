@@ -28,7 +28,10 @@ export default function ProseContent({ html }: { html: string }) {
   useEffect(() => {
     if (!ref.current) return;
     ref.current.querySelectorAll('pre').forEach((pre) => {
-      if (pre.querySelector('.pre-header')) return;
+      if (pre.closest('.code-wrapper')) return;
+
+      const figure = pre.parentElement?.tagName === 'FIGURE' ? pre.parentElement : null;
+      const outerEl = figure ?? pre;
 
       const code = pre.querySelector('code');
       const lang = code?.getAttribute('data-language') ?? '';
@@ -41,7 +44,11 @@ export default function ProseContent({ html }: { html: string }) {
       dots.style.cssText = 'display:flex;gap:6px;align-items:center;flex-shrink:0;';
       ['#ff5f57', '#febc2e', '#28c840'].forEach((color) => {
         const dot = document.createElement('span');
-        dot.style.cssText = `width:12px;height:12px;border-radius:50%;background:${color};display:block;flex-shrink:0;`;
+        dot.style.width = '12px';
+        dot.style.height = '12px';
+        dot.style.borderRadius = '50%';
+        dot.style.background = color;
+        dot.style.flexShrink = '0';
         dots.appendChild(dot);
       });
       header.appendChild(dots);
@@ -68,7 +75,11 @@ export default function ProseContent({ html }: { html: string }) {
       };
       header.appendChild(btn);
 
-      pre.insertBefore(header, pre.firstChild);
+      const wrapper = document.createElement('div');
+      wrapper.className = 'code-wrapper';
+      outerEl.parentNode?.insertBefore(wrapper, outerEl);
+      wrapper.appendChild(header);
+      wrapper.appendChild(outerEl);
     });
   }, [html]);
 

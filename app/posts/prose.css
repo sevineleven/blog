@@ -51,6 +51,23 @@
 }
 
 /* 코드 블록 */
+.code-wrapper {
+  margin: 1.6rem 0;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.code-wrapper figure {
+  margin: 0;
+}
+.code-wrapper pre {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
 .prose pre {
   margin: 1.6rem 0;
   border-radius: 10px;
@@ -65,6 +82,9 @@
   line-height: 1.75;
   font-family: 'JetBrains Mono', monospace;
   background: transparent !important;
+  overflow-x: auto;
+}
+.code-wrapper pre > code {
   overflow-x: auto;
 }
 
