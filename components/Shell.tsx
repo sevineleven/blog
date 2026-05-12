@@ -13,7 +13,7 @@ const NAV_CONTAINER = {
   padding: '0 28px',
 } as const;
 
-export default function Shell({ children, posts }: { children: React.ReactNode; posts: PostMeta[] }) {
+export default function Shell({ children, posts, initialStats }: { children: React.ReactNode; posts: PostMeta[]; initialStats?: { today: number; total: number } }) {
   const [searchOpen, setSearchOpen] = useState(false);
 
   return (
@@ -22,7 +22,7 @@ export default function Shell({ children, posts }: { children: React.ReactNode; 
 
       <div className="blog-layout">
         <div className="blog-sidebar-col">
-          <Sidebar />
+          <Sidebar initialStats={initialStats} />
         </div>
         <main className="blog-main">
           {children}

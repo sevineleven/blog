@@ -33,5 +33,9 @@ export async function POST() {
     .upsert({ date: today, count: newCount });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+
+  const { data: all } = await client.from('site_visits').select('count');
+  const total = all?.reduce((sum, r) => sum + r.count, 0) ?? newCount;
+
+  return NextResponse.json({ ok: true, today: newCount, total });
 }

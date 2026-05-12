@@ -3,13 +3,19 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-export default function Sidebar() {
-  const [stats, setStats] = useState<{ today: number; total: number } | null>(null);
+type Stats = { today: number; total: number };
+
+export default function Sidebar({ initialStats }: { initialStats?: Stats }) {
+  const [stats, setStats] = useState<Stats | null>(initialStats ?? null);
 
   useEffect(() => {
-    fetch('/api/site-visits')
-      .then((r) => r.json())
-      .then((d) => setStats(d));
+    if (!initialStats) {
+      fetch('/api/site-visits').then((r) => r.json()).then(setStats);
+    }
+
+    const onUpdate = (e: Event) => setStats((e as CustomEvent<Stats>).detail);
+    window.addEventListener('site-stats-update', onUpdate);
+    return () => window.removeEventListener('site-stats-update', onUpdate);
   }, []);
 
   return (

@@ -6,6 +6,7 @@ import { getAllPosts } from '@/lib/posts';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import SiteVisitTracker from '@/components/SiteVisitTracker';
+import { supabase } from '@/lib/supabase';
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
@@ -35,8 +36,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+async function getInitialStats() {
+  try {
+    const today = new Date().toISOString().slice(0, 10);
+    const { data } = await supabase.from('site_visits').select('date, count');
+    const todayCount = data?.find((r) => r.date === today)?.count ?? 0;
+    const total = data?.reduce((sum, r) => sum + r.count, 0) ?? 0;
+    return { today: todayCount, total };
+  } catch {
+    return undefined;
+  }
+}
+
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const posts = getAllPosts();
+  const initialStats = await getInitialStats();
   return (
     <html lang="ko" className={`${jetbrainsMono.variable} ${doHyeon.variable}`}>
       <head>
@@ -45,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme')||(document.cookie.match(/(?:^|;\\s*)theme=(dark|light)/)||[])[1];if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}else if(window.matchMedia('(prefers-color-scheme: light)').matches){document.documentElement.setAttribute('data-theme','light');}else{document.documentElement.setAttribute('data-theme','dark');}}catch(e){}})();` }} />
       </head>
       <body>
-        <Shell posts={posts}>
+        <Shell posts={posts} initialStats={initialStats}>
           {children}
         </Shell>
         <Analytics />
