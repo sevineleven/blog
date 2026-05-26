@@ -8,6 +8,7 @@ const CATEGORY_COLORS: Record<string, { text: string; bg: string; border: string
   '백엔드':    { text: '#3dd68c', bg: 'rgba(61,214,140,0.08)', border: 'rgba(61,214,140,0.2)' },
   '일상':      { text: '#b388ff', bg: 'rgba(179,136,255,0.08)', border: 'rgba(179,136,255,0.2)' },
   '사이드프로젝트': { text: '#f4a23a', bg: 'rgba(244,162,58,0.08)', border: 'rgba(244,162,58,0.2)' },
+  '회고':      { text: '#f08080', bg: 'rgba(240,128,128,0.08)', border: 'rgba(240,128,128,0.2)' },
   '기타':      { text: '#56566a', bg: 'rgba(86,86,106,0.08)',   border: 'rgba(86,86,106,0.2)'  },
 };
 
