@@ -126,7 +126,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               style={{
                 display: 'flex',
                 fontFamily: 'Do Hyeon',
-                fontSize: 52,
+                fontSize: 46,
                 lineHeight: 1.3,
                 color: '#e0e0e6',
                 width: '72%',
