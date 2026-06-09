@@ -89,7 +89,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
             <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, #17171b 34%, rgba(23,23,27,0) 92%)' }} />
 
             <div style={{ display: 'flex', color: '#3dd68c', fontSize: 30, marginBottom: 28 }}>$ cat {slug}.md</div>
-            <div style={{ display: 'flex', fontFamily: 'Do Hyeon', fontSize: 56, lineHeight: 1.3, color: '#e0e0e6', width: '74%', marginBottom: 38 }}>{title}</div>
+            <div style={{ display: 'flex', fontFamily: 'Do Hyeon', fontSize: 56, lineHeight: 1.3, color: '#e0e0e6', width: '74%', marginBottom: 38, wordBreak: 'keep-all' }}>{title}</div>
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
               {tags.map((t) => (
                 <div key={t} style={{ display: 'flex', color: '#b388ff', fontSize: 28, background: 'rgba(179,136,255,0.12)', padding: '8px 20px', borderRadius: 10, marginRight: 14, marginBottom: 10 }}>#{t}</div>

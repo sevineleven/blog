@@ -131,6 +131,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 color: '#e0e0e6',
                 width: '72%',
                 marginBottom: 32,
+                wordBreak: 'keep-all',
               }}
             >
               {title}

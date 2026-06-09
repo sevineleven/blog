@@ -79,16 +79,11 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [canNativeShare, setCanNativeShare] = useState(false);
 
   const ogUrl = `${SITE}/posts/${slug}/opengraph-image`;
   const storyUrl = `/posts/${slug}/story-image`;
 
   useEffect(() => setMounted(true), []);
-
-  useEffect(() => {
-    setCanNativeShare(typeof navigator !== 'undefined' && typeof navigator.share === 'function');
-  }, []);
 
   // Kakao SDK 로드 + 초기화 (키가 있을 때만)
   useEffect(() => {
@@ -140,13 +135,21 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
     });
   };
 
-  const nativeShare = async () => {
+  // 인스타 스토리: 9:16 이미지를 파일로 공유 시트에 첨부(모바일) → 인스타 선택 → 스토리.
+  // 웹에서 스토리 자동 게시는 불가하므로 여기까지가 한계. 데스크톱은 이미지를 새 탭으로 연다.
+  const shareInstagramStory = async () => {
     try {
-      await navigator.share?.({ title, url });
+      const res = await fetch(storyUrl);
+      const blob = await res.blob();
+      const file = new File([blob], `${slug}-story.png`, { type: 'image/png' });
+      const nav = navigator as Navigator & { canShare?: (d?: { files?: File[] }) => boolean };
+      if (nav.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title } as ShareData);
+        return;
+      }
     } catch {}
+    window.open(storyUrl, '_blank');
   };
-
-  const xUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
 
   const trigger = (
     <button
@@ -237,37 +240,14 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
           ) : null}
 
           <ActionRow
-            label="X (트위터)"
-            href={xUrl}
-            icon={
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.9 2H22l-7.5 8.6L23 22h-6.9l-5.4-7-6.2 7H1.3l8-9.2L1 2h7l4.9 6.5L18.9 2zm-1.2 18h1.9L7.1 4H5.1l12.6 16z" />
-              </svg>
-            }
-          />
-
-          {canNativeShare ? (
-            <ActionRow
-              label="다른 앱으로 공유"
-              hint="인스타·카톡 등"
-              onClick={nativeShare}
-              icon={
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
-                  <line x1="8.6" y1="13.5" x2="15.4" y2="17.5" /><line x1="15.4" y1="6.5" x2="8.6" y2="10.5" />
-                </svg>
-              }
-            />
-          ) : null}
-
-          <ActionRow
-            label="스토리 이미지 저장"
+            label="인스타 스토리"
             hint="9:16"
-            href={storyUrl}
+            onClick={shareInstagramStory}
             icon={
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="7" y="3" width="10" height="18" rx="2" />
-                <circle cx="12" cy="9" r="2.2" />
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none" />
               </svg>
             }
           />
