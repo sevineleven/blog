@@ -32,6 +32,13 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     avatarUri = `data:image/png;base64,${buf.toString('base64')}`;
   } catch {}
 
+  // 흐릿한 배경용 — me.png를 미리 블러 처리한 정적 이미지(sharp로 생성)
+  let blurUri = '';
+  try {
+    const buf = fs.readFileSync(path.join(process.cwd(), 'public', 'me-blur.png'));
+    blurUri = `data:image/png;base64,${buf.toString('base64')}`;
+  } catch {}
+
   const allText = title + tags.join('') + slug + date + 'sevin.dev$ cat ~/posts/.md#0123456789: KST읽어보기';
   const [doHyeon, jetbrains] = await Promise.all([
     loadGoogleFont('Do+Hyeon', allText),
@@ -45,11 +52,11 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
   return new ImageResponse(
     (
       <div style={{ width: '100%', height: '100%', display: 'flex', position: 'relative', overflow: 'hidden', background: '#0f0f12', fontFamily: 'JetBrains Mono' }}>
-        {/* 배경: 내 사진을 크게 깔고(왜곡 방지용 정사각 → 중앙 크롭) 어둡게 덮는다 */}
-        {avatarUri ? (
-          <img width={1920} height={1920} src={avatarUri} style={{ position: 'absolute', left: -420, top: 0, opacity: 0.5 }} />
+        {/* 배경: 미리 블러 처리한 내 사진을 가득 채우고, 그 위를 옅게 덮어 카드가 떠 보이게 */}
+        {blurUri ? (
+          <img width={1920} height={1920} src={blurUri} style={{ position: 'absolute', left: -420, top: 0 }} />
         ) : null}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(180deg, rgba(15,15,18,0.82) 0%, rgba(15,15,18,0.9) 45%, rgba(15,15,18,0.96) 100%)' }} />
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(180deg, rgba(15,15,18,0.5) 0%, rgba(15,15,18,0.68) 50%, rgba(15,15,18,0.88) 100%)' }} />
 
         {/* 콘텐츠 */}
         <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', padding: '130px 60px' }}>
