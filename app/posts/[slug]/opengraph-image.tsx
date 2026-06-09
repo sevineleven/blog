@@ -100,10 +100,10 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           <div style={{ display: 'flex', flexDirection: 'column', padding: 48, position: 'relative', overflow: 'hidden' }}>
             {avatarUri ? (
               <img
-                width={480}
-                height={480}
+                width={340}
+                height={340}
                 src={avatarUri}
-                style={{ position: 'absolute', right: -96, top: -28, borderRadius: 240, opacity: 0.3 }}
+                style={{ position: 'absolute', right: 28, top: 64, borderRadius: 170, opacity: 0.26 }}
               />
             ) : null}
             {/* 왼쪽(제목 영역)은 카드색으로 페이드시켜 가독성 보호 */}
