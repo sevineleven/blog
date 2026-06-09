@@ -1,5 +1,6 @@
 // 카카오톡 공유 전용 이미지 (1080×1080 정사각)
-// 카톡은 넓은 이미지의 좌우를 잘라서, 정사각으로 주면 위아래만 잘리고 가로(카드)는 온전히 보인다.
+// 카톡은 넓은 이미지의 좌우를 잘라서, 정사각으로 주면 가로(카드)가 온전히 보인다.
+// 카드를 크게 채워 카톡 공유 칸을 최대한 활용.
 import { ImageResponse } from 'next/og';
 import { getAllPosts } from '@/lib/posts';
 import fs from 'fs';
@@ -44,34 +45,34 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   return new ImageResponse(
     (
-      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: '#0f0f12', padding: 60, fontFamily: 'JetBrains Mono' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', width: 960, border: '1px solid #272730', borderRadius: 22, background: '#17171b', overflow: 'hidden' }}>
+      <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: '#0f0f12', padding: 36, fontFamily: 'JetBrains Mono' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: 1008, border: '1px solid #272730', borderRadius: 26, background: '#17171b', overflow: 'hidden' }}>
           {/* 상단바 */}
-          <div style={{ display: 'flex', alignItems: 'center', padding: '24px 30px', background: '#1e1e26', borderBottom: '1px solid #272730' }}>
-            <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#ff5f57', marginRight: 11 }} />
-            <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#febc2e', marginRight: 11 }} />
-            <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#28c840' }} />
-            <div style={{ display: 'flex', marginLeft: 22, color: '#56566a', fontSize: 24 }}>~/posts/{slug}</div>
+          <div style={{ display: 'flex', alignItems: 'center', padding: '34px 40px', background: '#1e1e26', borderBottom: '1px solid #272730' }}>
+            <div style={{ display: 'flex', width: 22, height: 22, borderRadius: 11, background: '#ff5f57', marginRight: 13 }} />
+            <div style={{ display: 'flex', width: 22, height: 22, borderRadius: 11, background: '#febc2e', marginRight: 13 }} />
+            <div style={{ display: 'flex', width: 22, height: 22, borderRadius: 11, background: '#28c840' }} />
+            <div style={{ display: 'flex', marginLeft: 26, color: '#56566a', fontSize: 28 }}>~/posts/{slug}</div>
           </div>
 
           {/* 본문 — 가운데 정렬, 프사는 옅은 중앙 배경 */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '56px 56px', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '96px 64px', position: 'relative', overflow: 'hidden' }}>
             {avatarUri ? (
-              <img width={420} height={420} src={avatarUri} style={{ position: 'absolute', top: '50%', left: '50%', marginLeft: -210, marginTop: -210, borderRadius: 210, opacity: 0.1 }} />
+              <img width={540} height={540} src={avatarUri} style={{ position: 'absolute', top: '50%', left: '50%', marginLeft: -270, marginTop: -270, borderRadius: 270, opacity: 0.1 }} />
             ) : null}
-            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 28, marginBottom: 26 }}>$ cat {slug}.md</div>
-            <div style={{ display: 'flex', textAlign: 'center', fontFamily: 'Do Hyeon', fontSize: 52, lineHeight: 1.34, color: '#e0e0e6', maxWidth: 800, marginBottom: 32, wordBreak: 'keep-all' }}>{title}</div>
+            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 36, marginBottom: 40 }}>$ cat {slug}.md</div>
+            <div style={{ display: 'flex', textAlign: 'center', fontFamily: 'Do Hyeon', fontSize: 68, lineHeight: 1.34, color: '#e0e0e6', maxWidth: 880, marginBottom: 48, wordBreak: 'keep-all' }}>{title}</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
               {tags.map((t) => (
-                <div key={t} style={{ display: 'flex', color: '#b388ff', fontSize: 26, background: 'rgba(179,136,255,0.12)', padding: '7px 18px', borderRadius: 9, margin: '0 7px' }}>#{t}</div>
+                <div key={t} style={{ display: 'flex', color: '#b388ff', fontSize: 34, background: 'rgba(179,136,255,0.12)', padding: '10px 24px', borderRadius: 12, margin: '0 9px' }}>#{t}</div>
               ))}
             </div>
           </div>
 
           {/* 푸터 */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '26px 40px', borderTop: '1px solid #272730' }}>
-            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 30 }}>sevin.dev</div>
-            <div style={{ display: 'flex', color: '#56566a', fontSize: 24 }}>{date}</div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '36px 48px', borderTop: '1px solid #272730' }}>
+            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 38 }}>sevin.dev</div>
+            <div style={{ display: 'flex', color: '#56566a', fontSize: 30 }}>{date}</div>
           </div>
         </div>
       </div>
