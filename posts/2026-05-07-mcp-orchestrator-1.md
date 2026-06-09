@@ -1,6 +1,6 @@
 ---
 title: "MCP 오케스트레이터 구축기 - Spring AI로 MCP 서버 띄우기"
-date: 2026-05-07T10:00:00Z
+date: 2026-05-07T09:28:00Z
 category: 백엔드
 tags: [백엔드, Spring, MCP]
 excerpt: "MCP를 클라이언트로만 쓰다가, 직접 서버를 만들어야 하는 상황이 됐다."

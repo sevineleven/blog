@@ -1,6 +1,6 @@
 ---
 title: "ADD(Agent-Driven Development)에서의 터미널 — iTerm2에서 cmux까지"
-date: 2026-06-03T09:00:00Z
+date: 2026-06-03T00:38:00Z
 category: 일상
 tags: [개발도구, 터미널, cmux, tmux, AI, 생산성]
 excerpt: "IntelliJ는 env 볼 때나 켜고, 터미널만 네 개 띄워놓고 에이전트를 병렬로 돌린다. 그러다 깨달았다 — 병목은 터미널이었다. iTerm2에서 tmux를 거쳐 cmux로 갈아타며, 에이전트 시대의 터미널이 무엇이어야 하는지 정리한 기록."

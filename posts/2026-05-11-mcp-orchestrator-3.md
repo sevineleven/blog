@@ -1,6 +1,6 @@
 ---
 title: "MCP 오케스트레이터 구축기 - 외부 MCP 서버 붙이기"
-date: 2026-05-11T10:00:00Z
+date: 2026-05-11T04:58:00Z
 category: 백엔드
 tags: [백엔드, Spring, MCP, Java]
 excerpt: "직접 만든 오케스트레이터에 Playwright MCP를 붙여서 실제 브라우저를 제어했다. 코드 한 줄 안 바꾸고."

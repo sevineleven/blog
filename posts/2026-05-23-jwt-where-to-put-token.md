@@ -1,6 +1,6 @@
 ---
 title: "JWT 토큰 어디에 둘까 — 쿠키만 박았던 이유가 익숙함이었다는 깨달음 (Web · Native · WebView)"
-date: 2026-05-23T03:00:00Z
+date: 2026-05-23T08:31:00Z
 category: 백엔드
 tags: [백엔드, JWT, 인증, 보안]
 excerpt: "웹 only 환경에선 httpOnly 쿠키가 정답이었는데, Native · WebView 까지 환경이 셋이 되니 그 답이 깨졌다. body 채널을 왜 망설였는지부터 dual contract 까지, 책임 분담을 다시 따져본 기록."
