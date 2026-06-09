@@ -131,7 +131,7 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
         title,
         description: excerpt,
         // 카톡은 가로 넓은 이미지의 좌우를 크롭하므로 정사각 전용 이미지 사용 (?v= 캐시 무력화)
-        imageUrl: `${SITE}/posts/${slug}/kakao-image?v=5`,
+        imageUrl: `${SITE}/posts/${slug}/kakao-image?v=6`,
         link: { mobileWebUrl: url, webUrl: url },
       },
       buttons: [{ title: '글 보러가기', link: { mobileWebUrl: url, webUrl: url } }],

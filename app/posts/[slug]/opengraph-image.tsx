@@ -103,7 +103,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 width={440}
                 height={440}
                 src={avatarUri}
-                style={{ position: 'absolute', top: '50%', left: '50%', marginLeft: -220, marginTop: -220, borderRadius: 220, opacity: 0.22 }}
+                style={{ position: 'absolute', top: '50%', left: '50%', marginLeft: -220, marginTop: -220, borderRadius: 220, opacity: 0.28 }}
               />
             ) : null}
 
