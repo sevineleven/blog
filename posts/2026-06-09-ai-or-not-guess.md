@@ -35,12 +35,34 @@ claude code가 고른 소재는 한 주니어 백엔드 개발자의 장애 회�
 처음 짠 코드는 이랬다.
 
 ```java
-for (int i = 0; i < 3; i++) {
-    try {
-        notificationClient.send(payment);
-        break;
-    } catch (TimeoutException e) {
-        log.warn("알림 전송 실패, 재시도합니다. attempt={}", i);
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class PaymentNotificationService {
+
+    private static final int MAX_ATTEMPTS = 3;
+
+    private final NotificationClient notificationClient;
+
+    public void notifyPaymentCompleted(Payment payment) {
+        for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+            try {
+                notificationClient.send(toRequest(payment));
+                return;
+            } catch (NotificationTimeoutException e) {
+                log.warn("결제 알림 전송 타임아웃, 재시도. paymentId={}, attempt={}/{}",
+                        payment.getId(), attempt, MAX_ATTEMPTS);
+            }
+        }
+        throw new NotificationDeliveryException(payment.getId());
+    }
+
+    private NotificationRequest toRequest(Payment payment) {
+        return NotificationRequest.builder()
+                .userId(payment.getUserId())
+                .template(NotificationTemplate.PAYMENT_COMPLETED)
+                .amount(payment.getAmount())
+                .build();
     }
 }
 ```
@@ -56,8 +78,18 @@ for (int i = 0; i < 3; i++) {
 요청마다 고유 키를 붙이고, 서버는 같은 키면 한 번만 처리하게 고쳤다.
 
 ```java
-String idempotencyKey = "payment-" + payment.getId();
-notificationClient.send(payment, idempotencyKey);
+private NotificationRequest toRequest(Payment payment) {
+    return NotificationRequest.builder()
+            .userId(payment.getUserId())
+            .template(NotificationTemplate.PAYMENT_COMPLETED)
+            .amount(payment.getAmount())
+            .idempotencyKey(idempotencyKey(payment))   // 멱등키 추가
+            .build();
+}
+
+private String idempotencyKey(Payment payment) {
+    return "payment-notification:" + payment.getId();
+}
 ```
 
 이때 배운 건 하나다. 분산 환경에서 "실패"라는 신호를 곧이곧대로 믿으면 안 된다. 타임아웃은 실패가 아니라 "결과를 모름"에 가깝다. 재시도는 분명 센 무기지만, 멱등성이 없으면 데이터를 오히려 망가뜨린다.
@@ -73,12 +105,34 @@ notificationClient.send(payment, idempotencyKey);
 처음 작성한 코드는 다음과 같았다.
 
 ```java
-for (int i = 0; i < 3; i++) {
-    try {
-        notificationClient.send(payment);
-        break;
-    } catch (TimeoutException e) {
-        log.warn("알림 전송 실패, 재시도합니다. attempt={}", i);
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class PaymentNotificationService {
+
+    private static final int MAX_ATTEMPTS = 3;
+
+    private final NotificationClient notificationClient;
+
+    public void notifyPaymentCompleted(Payment payment) {
+        for (int attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+            try {
+                notificationClient.send(toRequest(payment));
+                return;
+            } catch (NotificationTimeoutException e) {
+                log.warn("결제 알림 전송 타임아웃, 재시도. paymentId={}, attempt={}/{}",
+                        payment.getId(), attempt, MAX_ATTEMPTS);
+            }
+        }
+        throw new NotificationDeliveryException(payment.getId());
+    }
+
+    private NotificationRequest toRequest(Payment payment) {
+        return NotificationRequest.builder()
+                .userId(payment.getUserId())
+                .template(NotificationTemplate.PAYMENT_COMPLETED)
+                .amount(payment.getAmount())
+                .build();
     }
 }
 ```
@@ -94,8 +148,18 @@ for (int i = 0; i < 3; i++) {
 결국 요청마다 고유한 키를 부여하고, 서버 측에서 동일한 키의 요청은 한 번만 처리하도록 수정했다.
 
 ```java
-String idempotencyKey = "payment-" + payment.getId();
-notificationClient.send(payment, idempotencyKey);
+private NotificationRequest toRequest(Payment payment) {
+    return NotificationRequest.builder()
+            .userId(payment.getUserId())
+            .template(NotificationTemplate.PAYMENT_COMPLETED)
+            .amount(payment.getAmount())
+            .idempotencyKey(idempotencyKey(payment))   // 멱등키 추가
+            .build();
+}
+
+private String idempotencyKey(Payment payment) {
+    return "payment-notification:" + payment.getId();
+}
 ```
 
 이 경험을 통해 배운 것은, 분산 환경에서 "실패"라는 신호를 액면 그대로 믿어서는 안 된다는 점이다. 타임아웃은 실패가 아니라 "결과를 알 수 없음"에 가깝다. 재시도는 강력한 도구이지만, 멱등성이 보장되지 않으면 오히려 데이터 정합성을 해치는 양날의 검이 될 수 있다.
