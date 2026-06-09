@@ -1,4 +1,5 @@
-// 인스타 스토리용 9:16 이미지 (1080×1920) — OG 카드를 세로 캔버스 가운데에 얹는다.
+// 인스타 스토리용 9:16 이미지 (1080×1920)
+// "피드를 스토리에 공유"하는 느낌: 어둡게 깐 내 사진 배경 + 가운데에 OG 카드(피드 모양).
 import { ImageResponse } from 'next/og';
 import { getAllPosts } from '@/lib/posts';
 import fs from 'fs';
@@ -31,7 +32,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
     avatarUri = `data:image/png;base64,${buf.toString('base64')}`;
   } catch {}
 
-  const allText = title + tags.join('') + slug + date + 'sevin.dev$ cat ~/posts/.md#0123456789: KST읽어보기 프로필 링크에서';
+  const allText = title + tags.join('') + slug + date + 'sevin.dev$ cat ~/posts/.md#0123456789: KST읽어보기';
   const [doHyeon, jetbrains] = await Promise.all([
     loadGoogleFont('Do+Hyeon', allText),
     loadGoogleFont('JetBrains+Mono:wght@500', allText),
@@ -43,70 +44,53 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   return new ImageResponse(
     (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          background: '#0f0f12',
-          padding: '120px 60px',
-          fontFamily: 'JetBrains Mono',
-        }}
-      >
-        {/* 상단 브랜딩 */}
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          {avatarUri ? <img width={64} height={64} src={avatarUri} style={{ borderRadius: 32, marginRight: 18, border: '2px solid #272730' }} /> : null}
-          <div style={{ display: 'flex', color: '#3dd68c', fontSize: 38 }}>sevin.dev</div>
-        </div>
+      <div style={{ width: '100%', height: '100%', display: 'flex', position: 'relative', overflow: 'hidden', background: '#0f0f12', fontFamily: 'JetBrains Mono' }}>
+        {/* 배경: 내 사진을 크게 깔고(왜곡 방지용 정사각 → 중앙 크롭) 어둡게 덮는다 */}
+        {avatarUri ? (
+          <img width={1920} height={1920} src={avatarUri} style={{ position: 'absolute', left: -420, top: 0, opacity: 0.5 }} />
+        ) : null}
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(180deg, rgba(15,15,18,0.82) 0%, rgba(15,15,18,0.9) 45%, rgba(15,15,18,0.96) 100%)' }} />
 
-        {/* 가운데: OG 카드 그대로 */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            width: 960,
-            border: '1px solid #272730',
-            borderRadius: 22,
-            background: '#17171b',
-            overflow: 'hidden',
-            boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', padding: '24px 30px', background: '#1e1e26', borderBottom: '1px solid #272730' }}>
-            <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#ff5f57', marginRight: 11 }} />
-            <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#febc2e', marginRight: 11 }} />
-            <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#28c840' }} />
-            <div style={{ display: 'flex', marginLeft: 22, color: '#56566a', fontSize: 24 }}>~/posts/{slug}</div>
+        {/* 콘텐츠 */}
+        <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between', padding: '130px 60px' }}>
+          {/* 상단 프로필 칩 */}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {avatarUri ? <img width={66} height={66} src={avatarUri} style={{ borderRadius: 33, marginRight: 18, border: '2px solid rgba(255,255,255,0.15)' }} /> : null}
+            <div style={{ display: 'flex', color: '#e0e0e6', fontSize: 40 }}>sevin.dev</div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', padding: 52, position: 'relative', overflow: 'hidden' }}>
-            {avatarUri ? (
-              <img width={520} height={520} src={avatarUri} style={{ position: 'absolute', right: -110, top: -30, borderRadius: 260, opacity: 0.3 }} />
-            ) : null}
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, #17171b 34%, rgba(23,23,27,0) 92%)' }} />
+          {/* 가운데: OG 카드(피드 모양) */}
+          <div style={{ display: 'flex', flexDirection: 'column', width: 920, border: '1px solid #272730', borderRadius: 24, background: '#17171b', overflow: 'hidden', boxShadow: '0 40px 100px rgba(0,0,0,0.6)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', padding: '24px 30px', background: '#1e1e26', borderBottom: '1px solid #272730' }}>
+              <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#ff5f57', marginRight: 11 }} />
+              <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#febc2e', marginRight: 11 }} />
+              <div style={{ display: 'flex', width: 18, height: 18, borderRadius: 9, background: '#28c840' }} />
+              <div style={{ display: 'flex', marginLeft: 22, color: '#56566a', fontSize: 24 }}>~/posts/{slug}</div>
+            </div>
 
-            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 30, marginBottom: 28 }}>$ cat {slug}.md</div>
-            <div style={{ display: 'flex', fontFamily: 'Do Hyeon', fontSize: 56, lineHeight: 1.3, color: '#e0e0e6', width: '74%', marginBottom: 38, wordBreak: 'keep-all' }}>{title}</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-              {tags.map((t) => (
-                <div key={t} style={{ display: 'flex', color: '#b388ff', fontSize: 28, background: 'rgba(179,136,255,0.12)', padding: '8px 20px', borderRadius: 10, marginRight: 14, marginBottom: 10 }}>#{t}</div>
-              ))}
+            <div style={{ display: 'flex', flexDirection: 'column', padding: 50, position: 'relative', overflow: 'hidden' }}>
+              {avatarUri ? <img width={300} height={300} src={avatarUri} style={{ position: 'absolute', right: 24, top: 52, borderRadius: 150, opacity: 0.26 }} /> : null}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, #17171b 34%, rgba(23,23,27,0) 92%)' }} />
+              <div style={{ display: 'flex', color: '#3dd68c', fontSize: 30, marginBottom: 28 }}>$ cat {slug}.md</div>
+              <div style={{ display: 'flex', fontFamily: 'Do Hyeon', fontSize: 52, lineHeight: 1.3, color: '#e0e0e6', width: '74%', marginBottom: 36, wordBreak: 'keep-all' }}>{title}</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+                {tags.map((t) => (
+                  <div key={t} style={{ display: 'flex', color: '#b388ff', fontSize: 28, background: 'rgba(179,136,255,0.12)', padding: '8px 20px', borderRadius: 10, marginRight: 14, marginBottom: 10 }}>#{t}</div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '28px 50px', borderTop: '1px solid #272730' }}>
+              <div style={{ display: 'flex', color: '#3dd68c', fontSize: 32 }}>sevin.dev</div>
+              <div style={{ display: 'flex', color: '#56566a', fontSize: 26 }}>{date}</div>
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '28px 52px', borderTop: '1px solid #272730' }}>
-            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 32 }}>sevin.dev</div>
-            <div style={{ display: 'flex', color: '#56566a', fontSize: 26 }}>{date}</div>
+          {/* 하단 CTA */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ display: 'flex', fontFamily: 'Do Hyeon', color: '#ffffff', fontSize: 44, marginBottom: 16 }}>읽어보기</div>
+            <div style={{ display: 'flex', color: '#9a9aa8', fontSize: 28 }}>blog.sevin.dev/posts/{slug}</div>
           </div>
-        </div>
-
-        {/* 하단 CTA */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ display: 'flex', fontFamily: 'Do Hyeon', color: '#e0e0e6', fontSize: 40, marginBottom: 14 }}>읽어보기</div>
-          <div style={{ display: 'flex', color: '#56566a', fontSize: 28 }}>blog.sevin.dev/posts/{slug}</div>
         </div>
       </div>
     ),
