@@ -58,7 +58,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
           {/* 본문 — 가운데 정렬, 프사는 옅은 중앙 배경 */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '96px 64px', position: 'relative', overflow: 'hidden' }}>
             {avatarUri ? (
-              <img width={540} height={540} src={avatarUri} style={{ position: 'absolute', top: '50%', left: '50%', marginLeft: -270, marginTop: -270, borderRadius: 270, opacity: 0.1 }} />
+              <img width={560} height={560} src={avatarUri} style={{ position: 'absolute', top: '50%', left: '50%', marginLeft: -280, marginTop: -280, borderRadius: 280, opacity: 0.32 }} />
             ) : null}
             <div style={{ display: 'flex', color: '#3dd68c', fontSize: 36, marginBottom: 40 }}>$ cat {slug}.md</div>
             <div style={{ display: 'flex', textAlign: 'center', fontFamily: 'Do Hyeon', fontSize: 68, lineHeight: 1.34, color: '#e0e0e6', maxWidth: 880, marginBottom: 48, wordBreak: 'keep-all' }}>{title}</div>
