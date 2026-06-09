@@ -129,7 +129,8 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
       objectType: 'feed',
       content: {
         title,
-        description: excerpt,
+        // 카드 이미지에 제목이 이미 크게 있으니, 설명은 excerpt 첫 문장만 짧게
+        description: excerpt.split('. ')[0].trim(),
         // 카톡은 가로 넓은 이미지의 좌우를 크롭하므로 정사각 전용 이미지 사용 (?v= 캐시 무력화)
         imageUrl: `${SITE}/posts/${slug}/kakao-image?v=6`,
         link: { mobileWebUrl: url, webUrl: url },
