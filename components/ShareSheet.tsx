@@ -130,7 +130,7 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
       content: {
         title,
         description: excerpt,
-        imageUrl: ogUrl,
+        imageUrl: `${ogUrl}?v=2`, // 카톡 스크랩 캐시 무력화용 버전 파라미터
         link: { mobileWebUrl: url, webUrl: url },
       },
       buttons: [{ title: '글 보러가기', link: { mobileWebUrl: url, webUrl: url } }],
