@@ -7,6 +7,7 @@ import BlogToc from '@/components/BlogToc';
 import ReadingProgress from '@/components/ReadingProgress';
 import ProseContent from '@/components/ProseContent';
 import SeriesBox from '@/components/SeriesBox';
+import ShareSheet from '@/components/ShareSheet';
 import '@/app/posts/prose.css';
 
 export async function generateStaticParams() {
@@ -105,9 +106,17 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         }}>
           {post.title}
         </h1>
-        <time style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
-          {post.date}
-        </time>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+          <time style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
+            {post.date}
+          </time>
+          <ShareSheet
+            url={`https://blog.sevin.dev/posts/${slug}`}
+            title={post.title}
+            excerpt={post.excerpt}
+            slug={slug}
+          />
+        </div>
       </header>
 
       <hr style={{ border: 'none', borderTop: '1px solid var(--border)', marginBottom: 40 }} />
