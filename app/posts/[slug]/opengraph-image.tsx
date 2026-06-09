@@ -31,7 +31,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const tags = (post?.tags ?? []).slice(0, 4);
   const date = (post?.date ?? '').replace(' KST', '');
 
-  // 프로필 사진(작가 서명용) — 빌드 시 public/me.png를 data URI로 임베드
+  // 프로필 사진 — 빌드 시 public/me.png를 data URI로 임베드
   let avatarUri = '';
   try {
     const buf = fs.readFileSync(path.join(process.cwd(), 'public', 'me.png'));
@@ -96,9 +96,29 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             </div>
           </div>
 
-          {/* 본문 */}
-          <div style={{ display: 'flex', flexDirection: 'column', padding: 48 }}>
-            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 26, marginBottom: 26 }}>
+          {/* 본문 — 우측에 프로필 사진을 크게 깔고 그라데이션으로 카드에 녹인다 */}
+          <div style={{ display: 'flex', flexDirection: 'column', padding: 48, position: 'relative', overflow: 'hidden' }}>
+            {avatarUri ? (
+              <img
+                width={480}
+                height={480}
+                src={avatarUri}
+                style={{ position: 'absolute', right: -96, top: -28, borderRadius: 240, opacity: 0.3 }}
+              />
+            ) : null}
+            {/* 왼쪽(제목 영역)은 카드색으로 페이드시켜 가독성 보호 */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: 'linear-gradient(to right, #17171b 34%, rgba(23,23,27,0) 92%)',
+              }}
+            />
+
+            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 26, marginBottom: 24 }}>
               $ cat {slug}.md
             </div>
 
@@ -106,10 +126,11 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               style={{
                 display: 'flex',
                 fontFamily: 'Do Hyeon',
-                fontSize: 62,
-                lineHeight: 1.25,
+                fontSize: 52,
+                lineHeight: 1.3,
                 color: '#e0e0e6',
-                marginBottom: 34,
+                width: '72%',
+                marginBottom: 32,
               }}
             >
               {title}
@@ -146,17 +167,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               borderTop: '1px solid #272730',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              {avatarUri ? (
-                <img
-                  width={56}
-                  height={56}
-                  src={avatarUri}
-                  style={{ borderRadius: 28, marginRight: 16, border: '2px solid #272730' }}
-                />
-              ) : null}
-              <div style={{ display: 'flex', color: '#3dd68c', fontSize: 28 }}>sevin.dev</div>
-            </div>
+            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 28 }}>sevin.dev</div>
             <div style={{ display: 'flex', color: '#56566a', fontSize: 22 }}>{date}</div>
           </div>
         </div>
