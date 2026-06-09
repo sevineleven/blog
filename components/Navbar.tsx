@@ -8,7 +8,7 @@ import ThemeToggle from './ThemeToggle';
 const FIXED_NAV = [
   { cmd: 'cd',   path: '~/blog',     href: '/',          external: false },
   { cmd: 'cd',   path: '~/universe', href: '/universe',  external: false },
-  { cmd: 'cd',   path: '~/portfolio', href: 'https://sevin.dev', external: true },
+  // 블로그 → 포트폴리오 링크는 의도적으로 제거 (포트폴리오 → 블로그 단방향만 허용)
 ];
 
 function getParent(pathname: string): { cmd: string; path: string; href: string; external: boolean } {
