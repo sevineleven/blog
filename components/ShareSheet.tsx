@@ -140,6 +140,8 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
   // 인스타 스토리: 9:16 이미지를 파일로 공유 시트에 첨부(모바일) → 인스타 선택 → 스토리.
   // 웹에서 스토리 자동 게시는 불가하므로 여기까지가 한계. 데스크톱은 이미지를 새 탭으로 연다.
   const shareInstagramStory = async () => {
+    // 스토리에 '링크 스티커'로 붙일 수 있게 URL을 미리 클립보드에 복사
+    try { await navigator.clipboard.writeText(url); } catch {}
     try {
       const res = await fetch(storyUrl);
       const blob = await res.blob();
@@ -253,6 +255,9 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
               </svg>
             }
           />
+          <p style={{ margin: '10px 6px 0', fontSize: 11.5, color: 'var(--muted)', fontFamily: 'var(--sans)', lineHeight: 1.55 }}>
+            인스타 스토리엔 이미지가 첨부돼요. 클릭되는 링크는 스토리 편집의 <b style={{ color: 'var(--text)', fontWeight: 600 }}>링크 스티커</b>에 붙여넣으면 돼요 — URL은 자동 복사됩니다.
+          </p>
         </div>
       </div>
     </div>,

@@ -96,48 +96,38 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             </div>
           </div>
 
-          {/* 본문 — 우측에 프로필 사진을 크게 깔고 그라데이션으로 카드에 녹인다 */}
-          <div style={{ display: 'flex', flexDirection: 'column', padding: 48, position: 'relative', overflow: 'hidden' }}>
+          {/* 본문 — 가운데 정렬(카톡 등 중앙 크롭에서도 제목이 살아남게). 프사는 옅은 중앙 배경 */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '54px 70px', position: 'relative', overflow: 'hidden' }}>
             {avatarUri ? (
               <img
-                width={340}
-                height={340}
+                width={440}
+                height={440}
                 src={avatarUri}
-                style={{ position: 'absolute', right: 28, top: 64, borderRadius: 170, opacity: 0.26 }}
+                style={{ position: 'absolute', top: '50%', left: '50%', marginLeft: -220, marginTop: -220, borderRadius: 220, opacity: 0.1 }}
               />
             ) : null}
-            {/* 왼쪽(제목 영역)은 카드색으로 페이드시켜 가독성 보호 */}
-            <div
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                background: 'linear-gradient(to right, #17171b 34%, rgba(23,23,27,0) 92%)',
-              }}
-            />
 
-            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 26, marginBottom: 24 }}>
+            <div style={{ display: 'flex', color: '#3dd68c', fontSize: 24, marginBottom: 22 }}>
               $ cat {slug}.md
             </div>
 
             <div
               style={{
                 display: 'flex',
+                textAlign: 'center',
                 fontFamily: 'Do Hyeon',
-                fontSize: 46,
-                lineHeight: 1.3,
+                fontSize: 48,
+                lineHeight: 1.32,
                 color: '#e0e0e6',
-                width: '72%',
-                marginBottom: 32,
+                maxWidth: 880,
+                marginBottom: 28,
                 wordBreak: 'keep-all',
               }}
             >
               {title}
             </div>
 
-            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
               {tags.map((t) => (
                 <div
                   key={t}
@@ -148,8 +138,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                     background: 'rgba(179,136,255,0.12)',
                     padding: '6px 16px',
                     borderRadius: 8,
-                    marginRight: 12,
-                    marginBottom: 8,
+                    margin: '0 6px',
                   }}
                 >
                   #{t}

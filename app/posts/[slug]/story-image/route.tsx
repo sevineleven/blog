@@ -75,14 +75,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
               <div style={{ display: 'flex', marginLeft: 22, color: '#56566a', fontSize: 24 }}>~/posts/{slug}</div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', padding: 50, position: 'relative', overflow: 'hidden' }}>
-              {avatarUri ? <img width={300} height={300} src={avatarUri} style={{ position: 'absolute', right: 24, top: 52, borderRadius: 150, opacity: 0.26 }} /> : null}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(to right, #17171b 34%, rgba(23,23,27,0) 92%)' }} />
-              <div style={{ display: 'flex', color: '#3dd68c', fontSize: 30, marginBottom: 28 }}>$ cat {slug}.md</div>
-              <div style={{ display: 'flex', fontFamily: 'Do Hyeon', fontSize: 52, lineHeight: 1.3, color: '#e0e0e6', width: '74%', marginBottom: 36, wordBreak: 'keep-all' }}>{title}</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '52px 54px' }}>
+              <div style={{ display: 'flex', color: '#3dd68c', fontSize: 30, marginBottom: 26 }}>$ cat {slug}.md</div>
+              <div style={{ display: 'flex', textAlign: 'center', fontFamily: 'Do Hyeon', fontSize: 52, lineHeight: 1.32, color: '#e0e0e6', maxWidth: 780, marginBottom: 32, wordBreak: 'keep-all' }}>{title}</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {tags.map((t) => (
-                  <div key={t} style={{ display: 'flex', color: '#b388ff', fontSize: 28, background: 'rgba(179,136,255,0.12)', padding: '8px 20px', borderRadius: 10, marginRight: 14, marginBottom: 10 }}>#{t}</div>
+                  <div key={t} style={{ display: 'flex', color: '#b388ff', fontSize: 28, background: 'rgba(179,136,255,0.12)', padding: '8px 20px', borderRadius: 10, margin: '0 7px' }}>#{t}</div>
                 ))}
               </div>
             </div>
