@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude code (local-only settings)
 .claude/settings.local.json
+
+# humanize-korean 스킬 작업 폴더 (윤문 중간 산출물)
+/_workspace
