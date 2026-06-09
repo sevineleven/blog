@@ -4,7 +4,9 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const SITE = 'https://blog.sevin.dev';
-const KAKAO_KEY = process.env.NEXT_PUBLIC_KAKAO_KEY;
+// Kakao JavaScript 키는 클라이언트 공개용(도메인 화이트리스트로 보호)이라 fallback 상수로 둬도 안전.
+// blog.sevin.dev 외 도메인에선 카카오가 거부함. 환경변수가 있으면 그게 우선.
+const KAKAO_KEY = process.env.NEXT_PUBLIC_KAKAO_KEY ?? 'bc84d10971bb3bf6f15bac01449a2baf';
 
 declare global {
   interface Window {
