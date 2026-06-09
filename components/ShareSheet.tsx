@@ -128,7 +128,9 @@ export default function ShareSheet({ url, title, excerpt, slug }: Props) {
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
-        title,
+        // 채팅으로 가는 제목(=알림·목록 미리보기 텍스트)은 '—' 앞 후킹만 짧게.
+        // 카드 이미지 속 풀 제목은 그대로 유지됨(별개).
+        title: title.split(/\s[—–-]\s/)[0].trim(),
         // 카드 이미지에 제목이 이미 크게 있으니, 설명은 excerpt 첫 문장만 짧게
         description: excerpt.split('. ')[0].trim(),
         // 카톡은 가로 넓은 이미지의 좌우를 크롭하므로 정사각 전용 이미지 사용 (?v= 캐시 무력화)
