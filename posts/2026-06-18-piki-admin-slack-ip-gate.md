@@ -198,6 +198,52 @@ private fun buildMessage(tokens: List<String>, notification: Notification): Mult
 }
 ```
 
+### 알림 종류마다 페이로드 모양이 다르다 (sealed로 조립)
+
+여기서 한 발 더 들어가면, 이 단일 페이로드는 그냥 납작한 DTO 하나가 아니다. 알림 종류에 따라 **모양 자체가 다른** `sealed` 타입이다.
+
+```kotlin
+sealed interface NotificationSsePayload {
+    val id: Long
+    val type: NotificationType
+    val title: String
+    val body: String
+    // ... category·imageUrl·refId 등 공통 필드
+
+    // 라우팅 없는 알림(토너먼트 참가·시작 등). refId 하나로 딥링크가 결정된다
+    data class Reference(/* 공통 */) : NotificationSsePayload
+    // 위시 출처 파싱 알림. kind=WISH
+    data class WishParsing(/* 공통 */) : NotificationSsePayload
+    // 토너먼트 출처 파싱 알림. tournamentId·tournamentItemId까지 들고 간다
+    data class TournamentParsing(/* 공통 */ val tournamentId: Long, val tournamentItemId: Long) : NotificationSsePayload
+}
+```
+
+`from()`은 알림의 라우팅 컨텍스트를 보고 이 셋 중 맞는 모양을 골라 만든다. 그리고 FCM으로 보낼 때 `toFcmData`가 그 모양을 `when`으로 분기해서, 그 타입이 실제로 가진 키만 data 맵에 담는다.
+
+```kotlin
+internal fun toFcmData(payload: NotificationSsePayload): Map<String, String> =
+    buildMap {
+        put("id", payload.id.toString())
+        put("type", payload.type.name)
+        put("refId", payload.refId.toString())
+        // category·imageUrl 등 공통 키 ...
+        when (payload) {
+            is Reference -> Unit                       // 라우팅 키 없음
+            is WishParsing -> put("kind", payload.kind.name)
+            is TournamentParsing -> {                  // 토너먼트 식별자까지
+                put("kind", payload.kind.name)
+                put("tournamentId", payload.tournamentId.toString())
+                put("tournamentItemId", payload.tournamentItemId.toString())
+            }
+        }
+    }
+```
+
+이게 내가 이 작업에서 제일 마음에 드는 부분이다. FCM의 data는 값에 null을 못 담는다. "이 알림은 토너먼트 식별자가 없으니 그 키는 빼자"를 런타임에 `if (x != null)`로 일일이 가리는 대신, 타입 자체에 모양을 박아두니 빠질 키는 처음부터 그 타입에 없다. 게다가 새 알림 종류가 생기면 `when`의 exhaustive가 깨져서 컴파일러가 "여기 처리 안 했다"고 짚어준다. 키를 빠뜨려 클라 딥링크가 조용히 깨지는 사고를, 컴파일 단계에서 막는 셈이다.
+
+정리하면 동적 조립이 두 겹이다. 문구(title/body)는 DB 템플릿에 변수를 치환해 채우고, 데이터 모양은 sealed 페이로드를 종류별로 골라 조립한다. 그렇게 만든 한 덩어리를 SSE·히스토리·FCM이 똑같이 나눠 쓴다.
+
 직접 빌드하니 라이브러리 뒤에 숨어 있던 결정들을 하나씩 내가 내려야 했다.
 
 **죽은 토큰을 언제 지울 것인가.** FCM이 발송 실패를 돌려줄 때, 그게 "앱 삭제돼서 토큰이 죽었다(UNREGISTERED)"일 수도 있고 "요청 파라미터가 잘못됐다(INVALID_ARGUMENT)"일 수도 있다. 둘을 똑같이 "죽은 토큰"으로 보고 지우면, 내 코드 버그 하나로 멀쩡한 토큰을 **대량 삭제**할 수 있다. 그래서 `UNREGISTERED`일 때만 보수적으로 지우고, 나머지는 로그만 남기고 토큰을 보존한다.
