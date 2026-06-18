@@ -126,6 +126,48 @@ export default function ProseContent({ html }: { html: string }) {
         }
       });
     });
+
+    const openImgLightbox = (img: HTMLImageElement) => {
+      const overlay = document.createElement('div');
+      overlay.className = 'svg-lightbox';
+      overlay.setAttribute('role', 'dialog');
+      overlay.setAttribute('aria-modal', 'true');
+      overlay.setAttribute('aria-label', img.alt || '확대된 이미지');
+
+      const clone = document.createElement('img');
+      clone.src = img.currentSrc || img.src;
+      clone.alt = img.alt;
+      overlay.appendChild(clone);
+
+      const prevOverflow = document.body.style.overflow;
+      const close = () => {
+        overlay.remove();
+        document.removeEventListener('keydown', onKey);
+        document.body.style.overflow = prevOverflow;
+      };
+      const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
+
+      overlay.addEventListener('click', close);
+      document.addEventListener('keydown', onKey);
+      document.body.style.overflow = 'hidden';
+      document.body.appendChild(overlay);
+    };
+
+    ref.current.querySelectorAll<HTMLImageElement>('img').forEach((img) => {
+      if (img.dataset.zoomBound === '1') return;
+      img.dataset.zoomBound = '1';
+      img.classList.add('zoomable');
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('role', 'button');
+      img.addEventListener('click', () => openImgLightbox(img));
+      img.addEventListener('keydown', (e) => {
+        const ke = e as KeyboardEvent;
+        if (ke.key === 'Enter' || ke.key === ' ') {
+          ke.preventDefault();
+          openImgLightbox(img);
+        }
+      });
+    });
   }, [html]);
 
   return <div ref={ref} className="prose" dangerouslySetInnerHTML={{ __html: html }} />;
