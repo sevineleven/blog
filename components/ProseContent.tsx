@@ -85,6 +85,15 @@ export default function ProseContent({ html }: { html: string }) {
       wrapper.appendChild(outerEl);
     });
 
+    // 표를 가로 스크롤 컨테이너로 감싼다 — 좁은 화면에서 표가 넘쳐도 레이아웃이 안 깨지고 가로로 스크롤된다.
+    ref.current.querySelectorAll('table').forEach((table) => {
+      if (table.closest('.table-scroll')) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'table-scroll';
+      table.parentNode?.insertBefore(wrap, table);
+      wrap.appendChild(table);
+    });
+
     const openLightbox = (svg: SVGElement) => {
       const overlay = document.createElement('div');
       overlay.className = 'svg-lightbox';

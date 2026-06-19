@@ -222,11 +222,26 @@
 }
 
 /* 테이블 */
+/* 표 가로 스크롤 — 좁은 화면에서 표가 넘치면 컨테이너 안에서 가로 스크롤 (레이아웃 안 깨짐) */
+.prose .table-scroll {
+  overflow-x: auto;
+  margin: 1.6rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+.prose .table-scroll > table {
+  margin: 0; /* 스크롤 래퍼가 여백을 가짐 */
+}
 .prose table {
   width: 100%;
   border-collapse: collapse;
   margin: 1.6rem 0;
   font-size: 14px;
+}
+/* 모바일에서만 셀 줄바꿈을 막아 표 전체가 가로 스크롤되게 (데스크톱은 자연스럽게 줄바꿈) */
+@media (max-width: 640px) {
+  .prose .table-scroll th, .prose .table-scroll td {
+    white-space: nowrap;
+  }
 }
 .prose th, .prose td {
   border: 1px solid var(--border);
