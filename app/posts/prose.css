@@ -3,6 +3,10 @@
   line-height: 1.85;
   font-size: 15px;
   font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+  /* 한국어는 어절(공백) 단위로 줄바꿈 — '백엔드'가 '백엔/드'로 쪼개지지 않게.
+     긴 영문 토큰·URL·인라인 코드는 overflow-wrap으로 넘칠 때만 끊는다. */
+  word-break: keep-all;
+  overflow-wrap: anywhere;
 }
 
 .prose h1, .prose h2, .prose h3, .prose h4 {

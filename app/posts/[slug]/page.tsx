@@ -84,7 +84,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       {/* 포스트 헤더 */}
       <header style={{ marginBottom: 40 }}>
-        <div style={{ display: 'flex', gap: 8, marginBottom: 14 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
           {post.tags.map((t) => (
             <Link key={t} href={`/?tag=${t}`} style={{
               fontFamily: 'var(--mono)',
@@ -94,6 +94,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
               padding: '2px 8px',
               borderRadius: 3,
               textDecoration: 'none',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
             }}>
               #{t}
             </Link>
