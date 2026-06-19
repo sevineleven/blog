@@ -27,7 +27,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: post.excerpt,
       url,
       type: 'article',
-      publishedTime: post.date,
+      publishedTime: post.publishedISO,
+      modifiedTime: post.updatedISO,
       tags: post.tags,
     },
     twitter: {
@@ -52,7 +53,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
     '@type': 'BlogPosting',
     headline: post.title,
     description: post.excerpt,
-    datePublished: post.date,
+    datePublished: post.publishedISO,
+    dateModified: post.updatedISO,
     keywords: post.tags.join(', '),
     url: `https://blog.sevin.dev/posts/${slug}`,
     author: { '@type': 'Person', name: 'sevin', url: 'https://blog.sevin.dev' },
@@ -107,8 +109,8 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           {post.title}
         </h1>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <time style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
-            {post.date}
+          <time dateTime={post.publishedISO} style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
+            발행 {post.date}{post.updated !== post.date ? ` · 업데이트 ${post.updated}` : ''}
           </time>
           <ShareSheet
             url={`https://blog.sevin.dev/posts/${slug}`}

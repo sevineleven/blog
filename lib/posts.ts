@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 import matter from 'gray-matter';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
@@ -21,7 +22,10 @@ function filenameToSlug(filename: string): string {
 export interface PostMeta {
   slug: string;
   title: string;
-  date: string;
+  date: string;          // 발행(최초 git 커밋) KST 표기
+  updated: string;       // 업데이트(최근 git 커밋) KST 표기
+  publishedISO: string;  // JSON-LD datePublished (ISO)
+  updatedISO: string;    // JSON-LD dateModified (ISO)
   category: string;
   tags: string[];
   draft: boolean;
@@ -68,6 +72,51 @@ function formatDate(raw: unknown): string {
   return `${y}-${mo}-${dy} ${h}:${mi} KST`;
 }
 
+// 글 날짜의 단일 출처는 git 커밋 이력이다 — 손으로 적은 frontmatter date 가 아니라
+// "최초 커밋=발행, 최근 커밋=업데이트". git 이 없거나(빌드 환경) shallow clone 이라 이력이
+// 안 보이면 frontmatter date 로 안전하게 fallback 한다.
+const gitDateCache = new Map<string, { publishedISO?: string; updatedISO?: string }>();
+function gitDates(filename: string): { publishedISO?: string; updatedISO?: string } {
+  const cached = gitDateCache.get(filename);
+  if (cached) return cached;
+  let result: { publishedISO?: string; updatedISO?: string } = {};
+  try {
+    const out = execSync(`git log --format=%aI -- "posts/${filename}"`, {
+      cwd: process.cwd(),
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    if (out) {
+      const lines = out.split('\n').map((l) => l.trim()).filter(Boolean);
+      // git log 는 최신순 — 첫 줄이 최근(업데이트), 마지막 줄이 최초(발행)
+      result = { updatedISO: lines[0], publishedISO: lines[lines.length - 1] };
+    }
+  } catch {
+    // git 미존재·shallow clone·미커밋 파일 → frontmatter fallback
+  }
+  gitDateCache.set(filename, result);
+  return result;
+}
+
+function toISO(raw: unknown): string {
+  if (!raw) return '';
+  const d = raw instanceof Date ? raw : new Date(String(raw));
+  return isNaN(d.getTime()) ? String(raw) : d.toISOString();
+}
+
+// git 우선, 없으면 frontmatter date. updated 가 없으면 published 와 동일.
+function resolveDates(filename: string, fmDate: unknown) {
+  const g = gitDates(filename);
+  const publishedISO = g.publishedISO ?? toISO(fmDate);
+  const updatedISO = g.updatedISO ?? publishedISO;
+  return {
+    publishedISO,
+    updatedISO,
+    date: formatDate(publishedISO || fmDate),
+    updated: formatDate(updatedISO || fmDate),
+  };
+}
+
 function getExcerpt(content: string, meta?: string): string {
   if (meta) return meta;
   return content.replace(/^#+\s.*/gm, '').replace(/[#*`[\]()]/g, '').trim().slice(0, 150);
@@ -84,10 +133,14 @@ export function getAllPosts(includeDrafts = false): PostMeta[] {
       const raw = fs.readFileSync(path.join(POSTS_DIR, filename), 'utf-8');
       const { data, content } = matter(raw);
       const wordCount = content.trim().split(/\s+/).length;
+      const d = resolveDates(filename, data.date);
       return {
         slug,
         title: data.title ?? slug,
-        date: formatDate(data.date),
+        date: d.date,
+        updated: d.updated,
+        publishedISO: d.publishedISO,
+        updatedISO: d.updatedISO,
         category: data.category ?? '기타',
         tags: data.tags ?? [],
         draft: data.draft ?? false,
@@ -129,10 +182,14 @@ export async function getPost(slug: string): Promise<Post | null> {
     .process(content);
 
   const wordCount = content.trim().split(/\s+/).length;
+  const d = resolveDates(filename, data.date);
   return {
     slug,
     title: data.title ?? slug,
-    date: formatDate(data.date),
+    date: d.date,
+    updated: d.updated,
+    publishedISO: d.publishedISO,
+    updatedISO: d.updatedISO,
     category: data.category ?? '기타',
     tags: data.tags ?? [],
     draft: data.draft ?? false,
