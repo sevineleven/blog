@@ -1,3 +1,5 @@
+import OwnerToggle from './OwnerToggle';
+
 export default function Footer() {
   return (
     <footer style={{
@@ -8,9 +10,7 @@ export default function Footer() {
       justifyContent: 'space-between',
       alignItems: 'center',
     }}>
-      <span style={{ fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)' }}>
-        © {new Date().getFullYear()} sevineleven
-      </span>
+      <OwnerToggle />
       <a
         href="https://github.com/sevineleven"
         target="_blank"

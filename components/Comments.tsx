@@ -61,11 +61,9 @@ function OwnerAvatar({ size = 18 }: { size?: number }) {
 function IdentityBar({
   identity,
   onChange,
-  onOwner,
 }: {
   identity: Identity;
   onChange: (next: Identity) => void;
-  onOwner: () => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(identity.author);
@@ -121,11 +119,6 @@ function IdentityBar({
         title="이름 직접 입력"
         style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
       >✎</button>
-      <button
-        onClick={onOwner}
-        title="글쓴이 모드 (오너 비밀키)"
-        style={{ ...mono, fontSize: 12, background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, opacity: 0.5 }}
-      >🔑</button>
     </span>
   );
 }
@@ -187,17 +180,12 @@ export default function Comments({ slug }: { slug: string }) {
       .then((data) => { if (Array.isArray(data)) setComments(data); });
   }, [slug]);
 
-  function enableOwner() {
-    const key = window.prompt('오너 비밀키 입력 (ADMIN_SECRET)');
-    if (!key) return;
-    try { localStorage.setItem(OWNER_KEY, key); } catch {}
-    setOwnerMode(true);
-  }
-
-  function disableOwner() {
-    try { localStorage.removeItem(OWNER_KEY); } catch {}
-    setOwnerMode(false);
-  }
+  // 글쓴이 모드는 footer 의 숨은 토글(OwnerToggle)이 켜고 끈다 — 이벤트로 동기화.
+  useEffect(() => {
+    const onOwnerChange = (e: Event) => setOwnerMode(!!(e as CustomEvent).detail?.on);
+    window.addEventListener('owner-mode-change', onOwnerChange);
+    return () => window.removeEventListener('owner-mode-change', onOwnerChange);
+  }, []);
 
   const tops = comments.filter((c) => !c.parent_id);
   const repliesOf = (id: string) =>
@@ -322,10 +310,9 @@ export default function Comments({ slug }: { slug: string }) {
               <OwnerAvatar />
               <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>{OWNER_NAME}</span>
               <span style={{ ...mono, fontSize: 10, color: 'var(--purple)' }}>글쓴이</span>
-              <button onClick={disableOwner} title="글쓴이 모드 해제" style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer' }}>해제</button>
             </span>
           ) : (
-            identity && <IdentityBar identity={identity} onChange={onIdentityChange} onOwner={enableOwner} />
+            identity && <IdentityBar identity={identity} onChange={onIdentityChange} />
           )}
         </div>
 
