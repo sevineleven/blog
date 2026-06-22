@@ -6,6 +6,7 @@ import ViewTracker from '@/components/ViewTracker';
 import BlogToc from '@/components/BlogToc';
 import ReadingProgress from '@/components/ReadingProgress';
 import ProseContent from '@/components/ProseContent';
+import LikeButton from '@/components/LikeButton';
 import SeriesBox from '@/components/SeriesBox';
 import ShareSheet from '@/components/ShareSheet';
 import '@/app/posts/prose.css';
@@ -131,6 +132,9 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
       {/* 본문 */}
       <ProseContent html={post.content} />
+
+      {/* 좋아요 */}
+      <LikeButton slug={slug} />
 
       {/* 이전/다음 */}
       <div style={{
