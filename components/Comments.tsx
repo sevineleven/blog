@@ -126,14 +126,30 @@ function IdentityBar({
   );
 }
 
+// 어드민 삭제 — 브라우저 confirm 대신 2번 클릭(삭제 → 정말?). 마우스 떼면 리셋.
+function DeleteButton({ onDelete }: { onDelete: () => void }) {
+  const [armed, setArmed] = useState(false);
+  return (
+    <button
+      onClick={() => (armed ? onDelete() : setArmed(true))}
+      onMouseLeave={() => setArmed(false)}
+      style={{ ...mono, fontSize: 11, color: '#ff6b6b', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
+    >
+      {armed ? '정말 삭제?' : '삭제'}
+    </button>
+  );
+}
+
 function CommentItem({
   c,
   isReply,
   onReply,
+  onDelete,
 }: {
   c: Comment;
   isReply: boolean;
   onReply?: () => void;
+  onDelete?: () => void;
 }) {
   return (
     <div style={{ padding: '14px 0', borderBottom: isReply ? 'none' : '1px solid var(--border)' }}>
@@ -153,11 +169,16 @@ function CommentItem({
         <span style={{ ...mono, fontSize: 11, color: 'var(--muted)' }}>{formatDate(c.created_at)}</span>
       </div>
       <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-wrap' }}>{c.body}</p>
-      {onReply && (
-        <button
-          onClick={onReply}
-          style={{ ...mono, fontSize: 11, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer', padding: '6px 0 0', marginTop: 2 }}
-        >↳ 답글</button>
+      {(onReply || onDelete) && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 6 }}>
+          {onReply && (
+            <button
+              onClick={onReply}
+              style={{ ...mono, fontSize: 11, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
+            >↳ 답글</button>
+          )}
+          {onDelete && <DeleteButton onDelete={onDelete} />}
+        </div>
       )}
     </div>
   );
@@ -208,6 +229,19 @@ export default function Comments({ slug }: { slug: string }) {
     });
     if (!res.ok) return null;
     return (await res.json()) as Comment;
+  }
+
+  // 어드민 삭제 — owner 키를 x-admin-secret 으로 보낸다. 부모 삭제 시 답글(parent_id===id)도 로컬에서 같이 제거(DB는 CASCADE).
+  async function deleteComment(id: string) {
+    const res = await fetch(`/api/comments?id=${id}`, {
+      method: 'DELETE',
+      headers: { 'x-admin-secret': ownerKey() },
+    });
+    if (res.ok) {
+      setComments((prev) => prev.filter((c) => c.id !== id && c.parent_id !== id));
+    } else {
+      setError('삭제 실패 (권한 또는 네트워크).');
+    }
   }
 
   async function submit(e: React.FormEvent) {
@@ -263,12 +297,22 @@ export default function Comments({ slug }: { slug: string }) {
             const replies = repliesOf(c.id);
             return (
             <div key={c.id} style={{ borderBottom: '1px solid var(--border)' }}>
-              <CommentItem c={c} isReply={false} onReply={() => { setReplyTo(c.id); setReplyBody(''); }} />
+              <CommentItem
+                c={c}
+                isReply={false}
+                onReply={() => { setReplyTo(c.id); setReplyBody(''); }}
+                onDelete={ownerMode ? () => deleteComment(c.id) : undefined}
+              />
 
               {replies.length > 0 && (
                 <div style={{ marginLeft: 24, borderLeft: '1px solid var(--border)', paddingLeft: 16 }}>
                   {replies.map((r) => (
-                    <CommentItem key={r.id} c={r} isReply />
+                    <CommentItem
+                      key={r.id}
+                      c={r}
+                      isReply
+                      onDelete={ownerMode ? () => deleteComment(r.id) : undefined}
+                    />
                   ))}
                 </div>
               )}
