@@ -16,6 +16,7 @@ interface Comment {
   body: string;
   created_at: string;
   parent_id: string | null;
+  is_owner: boolean;
 }
 
 function formatDate(iso: string) {
@@ -31,12 +32,40 @@ function formatDate(iso: string) {
 
 const mono = { fontFamily: 'var(--mono)' } as const;
 
+// 오너(글쓴이) — 깃허브 아바타 + 고정 이름. is_owner 댓글은 이걸로 렌더한다.
+const OWNER_NAME = 'sevineleven';
+const OWNER_AVATAR = 'https://github.com/sevineleven.png?size=80';
+const OWNER_KEY = 'blog_owner_key';
+
+function ownerKey(): string {
+  try {
+    return localStorage.getItem(OWNER_KEY) || '';
+  } catch {
+    return '';
+  }
+}
+
+function OwnerAvatar({ size = 18 }: { size?: number }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return (
+    <img
+      src={OWNER_AVATAR}
+      alt={OWNER_NAME}
+      width={size}
+      height={size}
+      style={{ borderRadius: '50%', display: 'block', flexShrink: 0 }}
+    />
+  );
+}
+
 function IdentityBar({
   identity,
   onChange,
+  onOwner,
 }: {
   identity: Identity;
   onChange: (next: Identity) => void;
+  onOwner: () => void;
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(identity.author);
@@ -92,6 +121,11 @@ function IdentityBar({
         title="이름 직접 입력"
         style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
       >✎</button>
+      <button
+        onClick={onOwner}
+        title="글쓴이 모드 (오너 비밀키)"
+        style={{ ...mono, fontSize: 12, background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, opacity: 0.5 }}
+      >🔑</button>
     </span>
   );
 }
@@ -108,8 +142,18 @@ function CommentItem({
   return (
     <div style={{ padding: '14px 0', borderBottom: isReply ? 'none' : '1px solid var(--border)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-        <span style={{ fontSize: 15 }}>{emojiForAuthor(c.author)}</span>
-        <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>{c.author}</span>
+        {c.is_owner ? (
+          <>
+            <OwnerAvatar />
+            <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>{c.author}</span>
+            <span style={{ ...mono, fontSize: 10, color: 'var(--purple)', border: '1px solid rgba(183,148,244,0.4)', borderRadius: 3, padding: '0 5px' }}>글쓴이</span>
+          </>
+        ) : (
+          <>
+            <span style={{ fontSize: 15 }}>{emojiForAuthor(c.author)}</span>
+            <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>{c.author}</span>
+          </>
+        )}
         <span style={{ ...mono, fontSize: 11, color: 'var(--muted)' }}>{formatDate(c.created_at)}</span>
       </div>
       <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-wrap' }}>{c.body}</p>
@@ -132,14 +176,28 @@ export default function Comments({ slug }: { slug: string }) {
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyBody, setReplyBody] = useState('');
   const [replySubmitting, setReplySubmitting] = useState(false);
+  const [ownerMode, setOwnerMode] = useState(false);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setIdentityState(getIdentity());
+    setOwnerMode(!!ownerKey());
     fetch(`/api/comments?slug=${slug}`)
       .then((r) => r.json())
       .then((data) => { if (Array.isArray(data)) setComments(data); });
   }, [slug]);
+
+  function enableOwner() {
+    const key = window.prompt('오너 비밀키 입력 (ADMIN_SECRET)');
+    if (!key) return;
+    try { localStorage.setItem(OWNER_KEY, key); } catch {}
+    setOwnerMode(true);
+  }
+
+  function disableOwner() {
+    try { localStorage.removeItem(OWNER_KEY); } catch {}
+    setOwnerMode(false);
+  }
 
   const tops = comments.filter((c) => !c.parent_id);
   const repliesOf = (id: string) =>
@@ -149,9 +207,12 @@ export default function Comments({ slug }: { slug: string }) {
 
   async function post(text: string, parent_id: string | null) {
     if (!text.trim() || !identity) return null;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    const key = ownerKey();
+    if (key) headers['x-owner-secret'] = key; // 서버가 ADMIN_SECRET 과 대조해 글쓴이로 박는다
     const res = await fetch('/api/comments', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({ post_slug: slug, author: identity.author, body: text, parent_id }),
     });
     if (!res.ok) return null;
@@ -227,7 +288,7 @@ export default function Comments({ slug }: { slug: string }) {
                     autoFocus
                     value={replyBody}
                     onChange={(e) => setReplyBody(e.target.value)}
-                    placeholder={`${identity?.author ?? ''} (으)로 답글...`}
+                    placeholder={`${ownerMode ? OWNER_NAME : (identity?.author ?? '')} (으)로 답글...`}
                     maxLength={1000}
                     rows={2}
                     style={{
@@ -256,7 +317,16 @@ export default function Comments({ slug }: { slug: string }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
           <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>$</span>
           <span style={{ ...mono, fontSize: 12, color: 'var(--muted)' }}>write comment</span>
-          {identity && <IdentityBar identity={identity} onChange={onIdentityChange} />}
+          {ownerMode ? (
+            <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <OwnerAvatar />
+              <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>{OWNER_NAME}</span>
+              <span style={{ ...mono, fontSize: 10, color: 'var(--purple)' }}>글쓴이</span>
+              <button onClick={disableOwner} title="글쓴이 모드 해제" style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer' }}>해제</button>
+            </span>
+          ) : (
+            identity && <IdentityBar identity={identity} onChange={onIdentityChange} onOwner={enableOwner} />
+          )}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await supabase
     .from('comments')
-    .select('id, author, body, created_at, parent_id')
+    .select('id, author, body, created_at, parent_id, is_owner')
     .eq('post_slug', slug)
     .order('created_at', { ascending: true });
 
@@ -24,6 +24,12 @@ export async function POST(req: NextRequest) {
     if (!post_slug || !author?.trim() || !body?.trim()) {
       return NextResponse.json({ error: 'missing fields' }, { status: 400 });
     }
+
+    // 오너(글쓴이) 검증 — x-owner-secret 이 ADMIN_SECRET 과 일치할 때만 글쓴이로 박는다(사칭 방지).
+    // 일치하면 author 를 'sevineleven' 으로 강제하고 is_owner=true.
+    const isOwner =
+      !!process.env.ADMIN_SECRET && req.headers.get('x-owner-secret') === process.env.ADMIN_SECRET;
+    const finalAuthor = isOwner ? 'sevineleven' : author.trim();
 
     // 답글이면 부모가 같은 글의 댓글인지 가볍게 검증 (아니면 최상위로 떨군다)
     let parentId: string | null = null;
@@ -39,8 +45,8 @@ export async function POST(req: NextRequest) {
 
     const { data, error } = await supabase
       .from('comments')
-      .insert({ post_slug, author: author.trim(), body: body.trim(), parent_id: parentId, password_hash: '' })
-      .select('id, author, body, created_at, parent_id')
+      .insert({ post_slug, author: finalAuthor, body: body.trim(), parent_id: parentId, is_owner: isOwner, password_hash: '' })
+      .select('id, author, body, created_at, parent_id, is_owner')
       .single();
 
     if (error) { console.error('[POST comments]', error); return NextResponse.json({ error: error.message }, { status: 500 }); }
