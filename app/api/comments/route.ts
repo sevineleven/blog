@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
 
   const { data, error } = await supabase
     .from('comments')
-    .select('id, author, body, created_at')
+    .select('id, author, body, created_at, parent_id')
     .eq('post_slug', slug)
     .order('created_at', { ascending: true });
 
@@ -20,15 +20,27 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { post_slug, author, body } = await req.json();
+    const { post_slug, author, body, parent_id } = await req.json();
     if (!post_slug || !author?.trim() || !body?.trim()) {
       return NextResponse.json({ error: 'missing fields' }, { status: 400 });
     }
 
+    // 답글이면 부모가 같은 글의 댓글인지 가볍게 검증 (아니면 최상위로 떨군다)
+    let parentId: string | null = null;
+    if (parent_id) {
+      const { data: parent } = await supabase
+        .from('comments')
+        .select('id')
+        .eq('id', parent_id)
+        .eq('post_slug', post_slug)
+        .single();
+      parentId = parent?.id ?? null;
+    }
+
     const { data, error } = await supabase
       .from('comments')
-      .insert({ post_slug, author: author.trim(), body: body.trim(), password_hash: '' })
-      .select('id, author, body, created_at')
+      .insert({ post_slug, author: author.trim(), body: body.trim(), parent_id: parentId, password_hash: '' })
+      .select('id, author, body, created_at, parent_id')
       .single();
 
     if (error) { console.error('[POST comments]', error); return NextResponse.json({ error: error.message }, { status: 500 }); }
@@ -36,7 +48,7 @@ export async function POST(req: NextRequest) {
     resend?.emails.send({
       from: 'blog@sevin.dev',
       to: process.env.NOTIFICATION_EMAIL!,
-      subject: `[블로그] 새 댓글 - ${post_slug}`,
+      subject: `[블로그] ${parentId ? '새 답글' : '새 댓글'} - ${post_slug}`,
       text: `${data.author}: ${data.body.slice(0, 100)}\n\nhttps://blog.sevin.dev/posts/${post_slug}#comments`,
     }).catch((e) => console.error('[notify comment]', e));
 
