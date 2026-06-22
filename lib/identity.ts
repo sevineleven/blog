@@ -116,3 +116,29 @@ export function getIdentity(): Identity {
   } catch {}
   return identity;
 }
+
+const MAX_NAME = 20;
+
+// 현재 아이덴티티를 localStorage 에 저장한다.
+export function setIdentity(identity: Identity): void {
+  try {
+    localStorage.setItem(KEY, JSON.stringify(identity));
+  } catch {}
+}
+
+// 새 랜덤 아이덴티티를 만들어 저장하고 반환한다 (🎲 재생성).
+export function regenerate(): Identity {
+  const identity = generate();
+  setIdentity(identity);
+  return identity;
+}
+
+// 직접 입력한 이름으로 아이덴티티를 만든다. 이모지는 이름에서 도출.
+// 트림 후 빈 값이면 null (호출부가 무시). 길이 상한 MAX_NAME.
+export function setCustomName(name: string): Identity | null {
+  const trimmed = name.trim().slice(0, MAX_NAME);
+  if (!trimmed) return null;
+  const identity: Identity = { author: trimmed, emoji: emojiForAuthor(trimmed) };
+  setIdentity(identity);
+  return identity;
+}
