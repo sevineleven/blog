@@ -81,6 +81,7 @@ function IdentityBar({
           autoFocus
           value={draft}
           maxLength={20}
+          placeholder="닉네임"
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') save();
@@ -91,15 +92,17 @@ function IdentityBar({
             fontSize: 12,
             background: 'var(--surface)',
             border: '1px solid var(--border)',
-            borderRadius: 4,
-            padding: '2px 8px',
+            borderRadius: 6,
+            padding: '4px 10px',
             color: 'var(--text)',
             outline: 'none',
-            width: 140,
+            width: 130,
           }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = 'rgba(61,214,140,0.4)')}
+          onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--border)')}
         />
-        <button onClick={save} style={{ ...mono, fontSize: 12, color: 'var(--green)', background: 'transparent', border: 'none', cursor: 'pointer' }}>저장</button>
-        <button onClick={() => setEditing(false)} style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer' }}>취소</button>
+        <button onClick={save} style={{ ...mono, fontSize: 12, color: 'var(--green)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}>저장</button>
+        <button onClick={() => setEditing(false)} style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}>취소</button>
       </span>
     );
   }
