@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 import { supabase, supabaseAdmin } from '@/lib/supabase';
 
+// 방문 집계 날짜는 KST 기준. UTC(toISOString)로 하면 오전 9시(=00:00 UTC)에 날짜가 바뀌어
+// today 가 그 시각에 0으로 리셋된다(줄어드는 것처럼 보임). +9h 후 자르면 한국 자정에 리셋.
+function kstToday(): string {
+  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+}
+
 export async function GET() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = kstToday();
 
   const { data, error } = await supabase
     .from('site_visits')
@@ -17,7 +23,7 @@ export async function GET() {
 }
 
 export async function POST() {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = kstToday();
   const client = supabaseAdmin ?? supabase;
 
   const { data: current } = await client
