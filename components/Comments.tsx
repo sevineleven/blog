@@ -131,6 +131,7 @@ export default function Comments({ slug }: { slug: string }) {
   const [error, setError] = useState('');
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyBody, setReplyBody] = useState('');
+  const [replySubmitting, setReplySubmitting] = useState(false);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -173,7 +174,8 @@ export default function Comments({ slug }: { slug: string }) {
   }
 
   async function submitReply(parentId: string) {
-    if (!replyBody.trim() || !identity) return;
+    if (replySubmitting || !replyBody.trim() || !identity) return;
+    setReplySubmitting(true);
     const created = await post(replyBody, parentId);
     if (created) {
       setComments((prev) => [...prev, created]);
@@ -182,6 +184,7 @@ export default function Comments({ slug }: { slug: string }) {
     } else {
       setError('답글 전송 실패. 다시 시도해줘.');
     }
+    setReplySubmitting(false);
   }
 
   function onIdentityChange(next: Identity) {
@@ -196,7 +199,7 @@ export default function Comments({ slug }: { slug: string }) {
         <span style={{ ...mono, fontSize: 12, color: 'var(--muted)' }}>cat comments/{slug}</span>
         <span style={{ flex: 1, height: 1, background: 'var(--border)' }} />
         <span style={{ ...mono, fontSize: 11, color: 'var(--muted)' }}>
-          {comments.length} {comments.length === 1 ? 'entry' : 'entries'}
+          {tops.length} {tops.length === 1 ? 'entry' : 'entries'}
         </span>
       </div>
 
@@ -204,13 +207,15 @@ export default function Comments({ slug }: { slug: string }) {
         <p style={{ ...mono, fontSize: 13, color: 'var(--muted)', paddingBottom: 28 }}>no comments yet.</p>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          {tops.map((c) => (
+          {tops.map((c) => {
+            const replies = repliesOf(c.id);
+            return (
             <div key={c.id} style={{ borderBottom: '1px solid var(--border)' }}>
               <CommentItem c={c} isReply={false} onReply={() => { setReplyTo(c.id); setReplyBody(''); }} />
 
-              {repliesOf(c.id).length > 0 && (
+              {replies.length > 0 && (
                 <div style={{ marginLeft: 24, borderLeft: '1px solid var(--border)', paddingLeft: 16 }}>
-                  {repliesOf(c.id).map((r) => (
+                  {replies.map((r) => (
                     <CommentItem key={r.id} c={r} isReply />
                   ))}
                 </div>
@@ -235,14 +240,15 @@ export default function Comments({ slug }: { slug: string }) {
                     <button onClick={() => setReplyTo(null)} style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer' }}>취소</button>
                     <button
                       onClick={() => submitReply(c.id)}
-                      disabled={!replyBody.trim()}
+                      disabled={replySubmitting || !replyBody.trim()}
                       style={{ ...mono, fontSize: 12, color: 'var(--green)', background: 'transparent', border: '1px solid rgba(61,214,140,0.3)', borderRadius: 6, padding: '4px 12px', cursor: 'pointer' }}
                     >&gt; 답글</button>
                   </div>
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

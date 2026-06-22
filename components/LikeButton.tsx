@@ -49,6 +49,7 @@ export default function LikeButton({ slug }: { slug: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ slug, action: next ? 'like' : 'unlike' }),
       });
+      if (!res.ok) throw new Error('like request failed');
       const data = await res.json();
       if (typeof data?.count === 'number') setCount(data.count);
     } catch {
