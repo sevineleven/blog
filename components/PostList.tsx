@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { PostMeta } from '@/lib/posts';
 import PostListItem from './PostListItem';
@@ -35,6 +35,18 @@ export default function PostList({ posts, tags }: { posts: PostMeta[]; tags: str
   const totalPages = Math.ceil(filtered.length / PER_PAGE);
   const paginated  = filtered.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
+  // 태그를 사용 빈도(글 수) 순으로 정렬 — 자주 쓰는 주제가 앞에 오고, 동률이면 가나다/알파벳순.
+  const tagCount = new Map<string, number>();
+  posts.forEach((p) => p.tags.forEach((t) => tagCount.set(t, (tagCount.get(t) ?? 0) + 1)));
+  const orderedTags = [...tags].sort(
+    (a, b) => (tagCount.get(b) ?? 0) - (tagCount.get(a) ?? 0) || a.localeCompare(b),
+  );
+  const TOP_TAGS = 10;
+  const [showAllTags, setShowAllTags] = useState(false);
+  let visibleTags = showAllTags ? orderedTags : orderedTags.slice(0, TOP_TAGS);
+  // 선택된 태그가 접힌 영역에 있으면 항상 보이게 한다.
+  if (tag && !visibleTags.includes(tag)) visibleTags = [tag, ...visibleTags];
+
   return (
     <>
       {/* 태그 필터 */}
@@ -52,7 +64,7 @@ export default function PostList({ posts, tags }: { posts: PostMeta[]; tags: str
           >
             all
           </button>
-          {tags.map((t) => (
+          {visibleTags.map((t) => (
             <button
               key={t}
               onClick={() => navigate(t, 1)}
@@ -67,6 +79,18 @@ export default function PostList({ posts, tags }: { posts: PostMeta[]; tags: str
               #{t}
             </button>
           ))}
+          {orderedTags.length > TOP_TAGS && (
+            <button
+              onClick={() => setShowAllTags((v) => !v)}
+              style={{
+                fontFamily: 'var(--mono)', fontSize: 12, padding: '4px 12px', borderRadius: 5,
+                border: '1px solid var(--border)', color: 'var(--muted)',
+                background: 'transparent', cursor: 'pointer',
+              }}
+            >
+              {showAllTags ? '접기' : `+${orderedTags.length - TOP_TAGS} 더보기`}
+            </button>
+          )}
         </div>
       )}
 
