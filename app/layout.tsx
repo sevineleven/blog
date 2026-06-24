@@ -28,6 +28,9 @@ export const metadata: Metadata = {
   description: '배우고 기록하는 개발자의 공간',
   alternates: {
     canonical: '/',
+    types: {
+      'application/rss+xml': '/feed.xml',
+    },
   },
   openGraph: {
     title: '개발자 세빈',
