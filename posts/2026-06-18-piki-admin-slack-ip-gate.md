@@ -277,3 +277,7 @@ internal fun toFcmData(payload: NotificationSsePayload): Map<String, String> =
 개발자는 사용자한테 편한 UX를 만드는 사람이라고만 생각했다. 근데 이번에 해보니, 팀에게도 그 편함을 만들어줄 줄 알아야 하는 것 같다. 같이 일하는 사람의 일을 코드로 덜어주는 것. 그게 좀 멋있는 일인 것 같다.
 
 4분 안에 읽히는 글을 나름의 원칙으로 했는데,,, 글이 너무 길어졌다...
+
+---
+
+> [디프만 공식 블로그 바로가기](https://medium.com/depromeet)
