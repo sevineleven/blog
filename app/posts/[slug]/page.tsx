@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getPost, getAllPosts, getAdjacentPosts, getSeriesPosts } from '@/lib/posts';
+import { supabase } from '@/lib/supabase';
 import Comments from '@/components/Comments';
 import ViewTracker from '@/components/ViewTracker';
 import ViewCount from '@/components/ViewCount';
@@ -15,6 +16,9 @@ import '@/app/posts/prose.css';
 export async function generateStaticParams() {
   return getAllPosts().map((p) => ({ slug: p.slug }));
 }
+
+// ISR: 조회수를 서버에서 60초마다 갱신 — 첫 HTML 에 숫자가 박혀 클라 fetch 깜빡임이 없다.
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -49,6 +53,13 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   const { prev, next } = getAdjacentPosts(slug);
   const seriesPosts = post.series ? getSeriesPosts(post.series) : null;
+
+  // 조회수를 서버에서 미리 읽어 첫 렌더에 표시 (ISR 로 60초마다 갱신). 실패해도 페이지는 렌더.
+  let viewCount = 0;
+  try {
+    const { data } = await supabase.from('post_views').select('count').eq('slug', slug).maybeSingle();
+    viewCount = data?.count ?? 0;
+  } catch { /* 조회수 조회 실패는 무시 */ }
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -117,7 +128,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             <time dateTime={post.publishedISO} style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
               발행 {post.date}{post.updated !== post.date ? ` · 업데이트 ${post.updated}` : ''}
             </time>
-            <ViewCount slug={slug} />
+            <ViewCount count={viewCount} />
           </div>
           <ShareSheet
             url={`https://blog.sevin.dev/posts/${slug}`}
