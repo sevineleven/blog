@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { getPost, getAllPosts, getAdjacentPosts, getSeriesPosts } from '@/lib/posts';
 import Comments from '@/components/Comments';
 import ViewTracker from '@/components/ViewTracker';
+import ViewCount from '@/components/ViewCount';
 import BlogToc from '@/components/BlogToc';
 import ReadingProgress from '@/components/ReadingProgress';
 import ProseContent from '@/components/ProseContent';
@@ -112,9 +113,12 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           {post.title}
         </h1>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <time dateTime={post.publishedISO} style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
-            발행 {post.date}{post.updated !== post.date ? ` · 업데이트 ${post.updated}` : ''}
-          </time>
+          <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', minWidth: 0 }}>
+            <time dateTime={post.publishedISO} style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
+              발행 {post.date}{post.updated !== post.date ? ` · 업데이트 ${post.updated}` : ''}
+            </time>
+            <ViewCount slug={slug} />
+          </div>
           <ShareSheet
             url={`https://blog.sevin.dev/posts/${slug}`}
             title={post.title}
