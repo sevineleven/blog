@@ -41,7 +41,9 @@ export const metadata: Metadata = {
 
 async function getInitialStats() {
   try {
-    const today = new Date().toISOString().slice(0, 10);
+    // API(/api/site-visits)와 반드시 같은 KST 기준으로 '오늘'을 계산한다.
+    // UTC(toISOString)로 자르면 API(KST)와 다른 날짜 행을 읽어 today 가 어긋난다(SSR 41 ↔ 클라 3 깜빡임).
+    const today = new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
     const { data } = await supabase.from('site_visits').select('date, count');
     const todayCount = data?.find((r) => r.date === today)?.count ?? 0;
     const total = data?.reduce((sum, r) => sum + r.count, 0) ?? 0;
