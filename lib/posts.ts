@@ -57,7 +57,8 @@ function extractHeadings(markdown: string): Heading[] {
   return headings;
 }
 
-// gray-matter가 YAML date를 Date 객체로 파싱하므로 YYYY-MM-DD KST 형식으로 정규화
+// gray-matter가 YAML date를 Date 객체로 파싱하므로 YYYY-MM-DD HH:MM(KST 기준) 형식으로 정규화.
+// 표기는 항상 KST라 라벨은 생략한다.
 function formatDate(raw: unknown): string {
   if (!raw) return '';
   const d = raw instanceof Date ? raw : new Date(String(raw));
@@ -69,7 +70,7 @@ function formatDate(raw: unknown): string {
   const dy = String(kst.getUTCDate()).padStart(2, '0');
   const h  = String(kst.getUTCHours()).padStart(2, '0');
   const mi = String(kst.getUTCMinutes()).padStart(2, '0');
-  return `${y}-${mo}-${dy} ${h}:${mi} KST`;
+  return `${y}-${mo}-${dy} ${h}:${mi}`;
 }
 
 // 글 날짜의 단일 출처는 git 커밋 이력이다 — 손으로 적은 frontmatter date 가 아니라
