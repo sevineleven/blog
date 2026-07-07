@@ -15,8 +15,9 @@ When invoked:
 2. **Validate** — run block-level and warn-level checks against changed posts (see Validation below).
 3. **Print report** — markdown format, one block per check group.
 4. **Confirm with user** — if any blocks fail, stop. If only warns, ask the user to proceed/abort.
-5. **Classify and commit** — group changed files by type, generate commit messages following repo style.
-6. **Push** — `git push origin main`. Never use `--no-verify`. Never force push.
+5. **Regenerate date manifest** — if any `posts/*.md` was added or modified, run `npm run gen-post-dates` and stage `lib/post-dates.json` into the post commit. This bakes each post's git first-commit(발행)·latest-commit(업데이트) time so Vercel (shallow clone, no full git history at build) shows accurate dates instead of falling back to frontmatter. Skip if no post files changed.
+6. **Classify and commit** — group changed files by type, generate commit messages following repo style.
+7. **Push** — `git push origin main`. Never use `--no-verify`. Never force push.
 
 ## Validation
 
@@ -62,10 +63,7 @@ Group changed files into commit-shaped buckets:
 
 For the commit subject, mimic recent style — run `git log --oneline -10` to see. Subject ≤72 chars, lowercase prefix, Korean body OK.
 
-Always end the commit message body with:
-```
-Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
-```
+Do NOT add an assistant/AI co-author trailer (e.g. `Co-Authored-By: <assistant> <noreply@...>`), and do NOT reference the AI assistant by name anywhere in the commit subject or body. The user does not want the AI assistant appearing in repo history at all. Preserve genuine human/bot co-authors (e.g. Vercel bot) if already present.
 
 Use HEREDOC with `git commit -m "$(cat <<'EOF' ... EOF)"` to preserve newlines.
 
