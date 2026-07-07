@@ -14,6 +14,18 @@ import GithubSlugger from 'github-slugger';
 
 const POSTS_DIR = path.join(process.cwd(), 'posts');
 
+// 발행/업데이트 날짜 매니페스트 — scripts/gen-post-dates.mjs 가 git 이력에서 미리 구운 값.
+// Vercel 은 shallow clone 이라 빌드 때 git 이력이 안 잡혀 frontmatter 로 fallback 되는 문제를 막는다.
+// 우선순위: 매니페스트 → git(로컬) → frontmatter.
+let postDatesManifest: Record<string, { publishedISO?: string; updatedISO?: string }> = {};
+try {
+  postDatesManifest = JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), 'lib', 'post-dates.json'), 'utf-8'),
+  );
+} catch {
+  // 매니페스트 없으면 git/frontmatter 로 fallback
+}
+
 // YYYY-MM-DD- 접두사 제거 → 짧은 영문 slug
 function filenameToSlug(filename: string): string {
   return filename.replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-/, '');
@@ -105,9 +117,9 @@ function toISO(raw: unknown): string {
   return isNaN(d.getTime()) ? String(raw) : d.toISOString();
 }
 
-// git 우선, 없으면 frontmatter date. updated 가 없으면 published 와 동일.
+// 매니페스트 우선 → git → frontmatter date. updated 가 없으면 published 와 동일.
 function resolveDates(filename: string, fmDate: unknown) {
-  const g = gitDates(filename);
+  const g = postDatesManifest[filename] ?? gitDates(filename);
   const publishedISO = g.publishedISO ?? toISO(fmDate);
   const updatedISO = g.updatedISO ?? publishedISO;
   return {

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "new-post": "node scripts/new-post.mjs",
-    "sync-image-dirs": "node scripts/sync-image-dirs.mjs"
+    "sync-image-dirs": "node scripts/sync-image-dirs.mjs",
+    "gen-post-dates": "node scripts/gen-post-dates.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.105.1",
