@@ -68,7 +68,7 @@ PiKi는 여러 쇼핑몰에 흩어져 있는 위시리스트를 한곳에 모으
 
 확실히 예빈 디자이너님이 젊어서 그런지 아이디어를 상큼하게 잘 뽑으시더라고요.
 
-디자이너 팀원분들이 열심히 작성하신 Behance 입니다. [PiKi — From Wish to Pick](https://www.behance.net/gallery/252137649/PiKi-From-Wish-to-Pick) 하입 부탁드립니다.
+*디자이너 팀원분들이 열심히 작성하신 Behance 입니다. [PiKi — From Wish to Pick](https://www.behance.net/gallery/252137649/PiKi-From-Wish-to-Pick) 하입 부탁드립니다.*
 
 서버에서 개발하며 포스팅할 만한 내용은 이미 따로 적어뒀고, PiKi 2.0을 개발하면서 계속 업데이트하려 합니다.
 
