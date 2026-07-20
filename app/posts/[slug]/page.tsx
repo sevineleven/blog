@@ -124,10 +124,16 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           {post.title}
         </h1>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', minWidth: 0 }}>
-            <time dateTime={post.publishedISO} style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)' }}>
-              발행 {post.date}{post.updated !== post.date ? ` · 업데이트 ${post.updated}` : ''}
+          {/* 메타는 조각별로 nowrap — 좁은 화면에서 날짜 한가운데가 잘리는 대신 조각 경계에서 줄이 바뀐다 */}
+          <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', columnGap: 10, rowGap: 2, minWidth: 0 }}>
+            <time dateTime={post.publishedISO} style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
+              발행 {post.date}
             </time>
+            {post.updated !== post.date && (
+              <time dateTime={post.updatedISO} style={{ fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
+                업데이트 {post.updated}
+              </time>
+            )}
             <ViewCount count={viewCount} />
           </div>
           <ShareSheet
