@@ -108,19 +108,19 @@ function IdentityBar({
   }
 
   return (
-    <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-      <span style={{ ...mono, fontSize: 12, color: 'var(--muted)' }}>
+    <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flexShrink: 0 }}>
+      <span style={{ ...mono, fontSize: 12, color: 'var(--muted)', wordBreak: 'break-all' }}>
         {identity.emoji} {identity.author}
       </span>
       <button
         onClick={() => onChange(regenerate())}
         title="랜덤 이름 다시 뽑기"
-        style={{ ...mono, fontSize: 13, background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
+        style={{ ...mono, fontSize: 13, background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, flexShrink: 0 }}
       >🎲</button>
       <button
         onClick={() => { setDraft(identity.author); setEditing(true); }}
         title="이름 직접 입력"
-        style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
+        style={{ ...mono, fontSize: 12, color: 'var(--muted)', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, flexShrink: 0 }}
       >✎</button>
     </span>
   );
@@ -153,20 +153,20 @@ function CommentItem({
 }) {
   return (
     <div style={{ padding: '14px 0', borderBottom: isReply ? 'none' : '1px solid var(--border)' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
+      <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '4px 10px', marginBottom: 6 }}>
         {c.is_owner ? (
           <>
             <OwnerAvatar />
-            <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>{c.author}</span>
-            <span style={{ ...mono, fontSize: 10, color: 'var(--purple)', border: '1px solid rgba(183,148,244,0.4)', borderRadius: 3, padding: '0 5px' }}>글쓴이</span>
+            <span style={{ ...mono, fontSize: 12, color: 'var(--green)', wordBreak: 'break-all' }}>{c.author}</span>
+            <span style={{ ...mono, fontSize: 10, color: 'var(--purple)', border: '1px solid rgba(183,148,244,0.4)', borderRadius: 3, padding: '0 5px', whiteSpace: 'nowrap', flexShrink: 0 }}>글쓴이</span>
           </>
         ) : (
           <>
-            <span style={{ fontSize: 15 }}>{emojiForAuthor(c.author)}</span>
-            <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>{c.author}</span>
+            <span style={{ fontSize: 15, flexShrink: 0 }}>{emojiForAuthor(c.author)}</span>
+            <span style={{ ...mono, fontSize: 12, color: 'var(--green)', wordBreak: 'break-all' }}>{c.author}</span>
           </>
         )}
-        <span style={{ ...mono, fontSize: 11, color: 'var(--muted)' }}>{formatDate(c.created_at)}</span>
+        <span style={{ ...mono, fontSize: 11, color: 'var(--muted)', whiteSpace: 'nowrap', flexShrink: 0 }}>{formatDate(c.created_at)}</span>
       </div>
       <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, margin: 0, whiteSpace: 'pre-wrap' }}>{c.body}</p>
       {(onReply || onDelete) && (
@@ -292,11 +292,11 @@ export default function Comments({ slug }: { slug: string }) {
       {tops.length === 0 ? (
         <p style={{ ...mono, fontSize: 13, color: 'var(--muted)', paddingBottom: 28 }}>no comments yet.</p>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           {tops.map((c) => {
             const replies = repliesOf(c.id);
             return (
-            <div key={c.id} style={{ borderBottom: '1px solid var(--border)' }}>
+            <div key={c.id} style={{ borderBottom: '1px solid var(--border)', minWidth: 0 }}>
               <CommentItem
                 c={c}
                 isReply={false}
@@ -305,7 +305,7 @@ export default function Comments({ slug }: { slug: string }) {
               />
 
               {replies.length > 0 && (
-                <div style={{ marginLeft: 24, borderLeft: '1px solid var(--border)', paddingLeft: 16 }}>
+                <div style={{ marginLeft: 12, borderLeft: '1px solid var(--border)', paddingLeft: 12, minWidth: 0 }}>
                   {replies.map((r) => (
                     <CommentItem
                       key={r.id}
@@ -318,7 +318,7 @@ export default function Comments({ slug }: { slug: string }) {
               )}
 
               {replyTo === c.id && (
-                <div style={{ marginLeft: 24, paddingLeft: 16, paddingBottom: 16 }}>
+                <div style={{ marginLeft: 12, paddingLeft: 12, paddingBottom: 16 }}>
                   <textarea
                     autoFocus
                     value={replyBody}
@@ -349,14 +349,14 @@ export default function Comments({ slug }: { slug: string }) {
       )}
 
       <form onSubmit={submit} style={{ marginTop: 32 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-          <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>$</span>
-          <span style={{ ...mono, fontSize: 12, color: 'var(--muted)' }}>write comment</span>
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 8, marginBottom: 14 }}>
+          <span style={{ ...mono, fontSize: 12, color: 'var(--green)', flexShrink: 0 }}>$</span>
+          <span style={{ ...mono, fontSize: 12, color: 'var(--muted)', flexShrink: 0 }}>write comment</span>
           {ownerMode ? (
-            <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
               <OwnerAvatar />
-              <span style={{ ...mono, fontSize: 12, color: 'var(--green)' }}>{OWNER_NAME}</span>
-              <span style={{ ...mono, fontSize: 10, color: 'var(--purple)' }}>글쓴이</span>
+              <span style={{ ...mono, fontSize: 12, color: 'var(--green)', whiteSpace: 'nowrap' }}>{OWNER_NAME}</span>
+              <span style={{ ...mono, fontSize: 10, color: 'var(--purple)', whiteSpace: 'nowrap', flexShrink: 0 }}>글쓴이</span>
             </span>
           ) : (
             identity && <IdentityBar identity={identity} onChange={onIdentityChange} />
